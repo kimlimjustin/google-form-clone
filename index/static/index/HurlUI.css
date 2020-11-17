@@ -1,0 +1,335 @@
+@import url("https://fonts.googleapis.com/css?family=Roboto+Condensed");
+@import url("https://fonts.googleapis.com/css?family=Poppins");
+@import url("https://fonts.googleapis.com/css?family=Montserrat");
+@import url("https://fonts.googleapis.com/css?family=Times+New+Roman");
+body{
+	margin: 0;
+	padding: 0;
+	font-family: "Times New Roman","Roboto Condensed", "Poppins","Arial";
+}
+
+.center{
+	text-align: center;
+}
+
+.link{
+    color: #000;
+    text-decoration: none;
+    opacity: .7;
+}
+.link:hover{opacity: .4;}
+
+.margin{
+	margin: 20px;
+}
+
+.margin-top-bottom{
+	margin: 20px 0;
+}
+
+.margin-left-right{
+	margin: 0 20px;
+}
+
+.text-link{
+	opacity: .8;
+}
+
+.text-link:hover{
+	opacity: .4;
+}
+.container {
+	padding-right: 15px;
+	padding-left: 15px;
+	margin-right: auto;
+	margin-left: auto;
+}
+.container-fluid {
+  	width: 100%;
+}
+[class*="col-"] {
+  float: left;
+}
+.row{
+	grid-row-gap: 5px;
+	grid-column-gap: 5px;
+	float: left;
+}
+.bg-dark, .btn-dark{
+	background-color: #1c1e1f !important;
+	color: #FFF !important;
+}
+
+.bg-light, .btn-light{
+	background-color: #DAE0E2 !important;
+	color: #000 !important;
+}
+
+.bg-black{
+	background-color: #000 !important;
+	color: #FFF !important;
+}
+
+.bg-white{
+	background-color: #FFF !important;
+	color: #000 !important;
+}
+
+body[theme="dark"]{
+	background-color: #080808;
+	color: #FFF;
+}
+body[theme="light"]{
+	background-color: #F5F5F5;
+	color: #000;
+}
+.text-dark{color: #1c1e1f !important;}
+.text-light{color: #DAE0E2 !important;}
+.text-danger{color: #E71C23 !important;}
+.text-success{color: #6AB04A !important;}
+.text-warning{color: #FFF222 !important;}
+.text-blur{opacity: .7;}
+.text-red{color : #e60000 !important;}
+.text-darkblue{color : #000066 !important;}
+.text-blue{color : #0000ff !important;}
+.text-green{color: #00b300 !important;}
+.text-darkgreen{color: #004d00 !important;}
+.text-lightgreen{color: #00e600 !important;}
+.text-orange{color: #ff9900 !important;}
+.text-cyan{color: #33ffff !important;} 
+.text-gray{color: #ccccb3 !important;}
+
+.col-1 , .col-ex-1{width: 8.33%;}
+.col-2 , .col-ex-2{width: 16.66%;}
+.col-3 , .col-ex-3{width: 25%;}
+.col-4 , .col-ex-4{width: 33.33%;}
+.col-5 , .col-ex-5{width: 41.66%;}
+.col-6 , .col-ex-6{width: 50%;}
+.col-7 , .col-ex-7{width: 58.33%;}
+.col-8 , .col-ex-8{width: 66.66%;}
+.col-9 , .col-ex-9{width: 75%;}
+.col-10, .col-ex-10 {width: 83.33%;}
+.col-11, .col-ex-11 {width: 91.66%;}
+.col-12, .col-ex-1 {width: 100%;}
+
+.btn{
+	padding: 10px;
+	border: 1px solid black;
+	border-radius: 5px;
+	text-decoration: none;
+	font-size: 1rem;
+	color: black;
+	font-family: "Poppins";
+}
+.btn-hover:hover{
+	box-shadow: 5px 2px 8px;
+	opacity: .7;
+}
+.btn-danger{background-color: #E71C23; color: #FFF;}
+.btn-success{background-color: #6AB04A; color: #FFF;}
+.btn-warning{background-color: #FFF222; color: #000;}
+
+.box{
+	padding: 10px;
+	border: 1px solid #999;
+	border-radius: 5px;
+	width: -webkit-fill-available;
+}
+
+.box-image img, .box-image{
+	width: 100%;
+}
+.box-title, .heading-title{
+	font-weight: bold;
+	text-align: center;
+	font-family: "Montserrat";
+	padding: 2px 5px;
+	border-bottom: 0.5px solid #e6e6e6; 
+}
+
+.box-text{
+	font-family: "Roboto Condensed";
+}
+
+.box-shadow{
+	box-shadow: 3px 5px 11px;
+}
+
+.form-label, .text-label{
+	font-family: "Poppins", "Arial";
+	margin: 10px 0;
+}
+
+.form-group{
+	margin: 16px 14px;
+}
+
+.form-control{
+	color: black;
+	border: 1px solid #bfbfbf;
+	width: -webkit-fill-available;
+	border-radius: 5px;
+	padding: 8px;
+
+}
+.form-hover:hover{
+	opacity: .7;
+	box-shadow: 2px 2px 3px;
+}
+.navbar{
+	margin: 0;
+	padding: 0;
+	overflow: hidden;
+	background-color: white;
+	width: 100%;
+}
+
+.nav-list{
+	margin: 0;
+	list-style-type: none;
+}
+.nav-logo, .nav-logo a{
+	float: left;
+	max-width: 200px;
+	margin: 10px;
+	text-decoration: none;
+	color: black;
+	font-size: 1.5rem;
+}
+.navbar .nav-item{
+	display: block;
+	text-align: center;
+	padding: 14px 16px;
+	font-size: 17px;
+	float: right;
+}
+
+.navbar .nav-item a{
+	text-decoration: none;
+	color: black;
+}
+.navbar .nav-item a:hover{
+	opacity: .7;
+}
+
+.nav-icon{
+	display: none !important;
+}
+
+.fixed-top{
+	top: 0px;
+	position: fixed;
+}
+
+.fixed-bottom{
+	bottom: 0;
+	position: fixed;
+}
+
+.text-center{
+	text-align: center;
+}
+
+footer, .footer{
+	width: 100%;
+	float: left;
+}
+
+.copyright{
+	text-align: center;
+	font-size: 20px;
+	border-top: 1px solid;
+	padding: 10px;
+	background-color: #000;
+	color: #FFF;
+	margin: 0;
+}
+
+code{
+	text-align: center;
+	padding: 10px 20px;
+	border-radius: 5px;
+}
+
+.img-frame{
+	border: 1px solid #ddd;
+	border-radius: 4px;
+	padding: 5px;
+}
+
+.img-hover:hover{
+	 opacity: .4;
+}
+table{
+	width: 100%;
+}
+
+th{
+	height: 40px;
+}
+
+td{padding: 8px;}
+.table-border, .table-border table, .table-border th, .table-border tr, .table-border td{
+	border: 1px solid;
+}
+
+.table-white-black tr:nth-child(even){background-color: #000; color: #FFF;}
+.table-white-black tr:nth-child(odd){background-color: #FFF; color: #000;}
+.table-black-white tr:nth-child(odd){background-color: #000; color: #FFF;}
+.table-black-white tr:nth-child(even){background-color: #FFF; color: #000;}
+@media only screen and (max-width: 600px){
+	.nav-icon{
+		display: block !important;
+		position: absolute;
+		right: 20px;
+		top: 20px;
+	}
+
+	.nav-item{
+		float: left;
+		width: 100vw;
+	}
+	.nav-responsive{
+		display: block !important;
+	}
+	.nav-list-responsive{
+		display: none;
+	}
+}
+@media only screen and (max-width: 600px) {
+	[class*="col-"] {
+		width: 100% !important;
+	}
+}
+@media only screen and (max-width: 768px){
+	.col-1{
+		width: 16.66%;
+	}
+	.col-2{
+		width: 25%;
+	}
+	.col-3, .col-4, .col-5, .col-6{
+		width: 50%;
+	}
+	.col-7, .col-8, .col-9, .col-10, .col-11, .col-12{
+		width: 100%;
+	}
+	[class*="col-ex-"]{
+		width: 100%;
+	}
+}
+@media only screen and (min-width: 768px) {
+	.container {
+		width: 750px;
+	}
+}
+@media only screen and (min-width: 992px) {
+	.container {
+		width: 970px;
+	}
+}
+@media only screen and (min-width: 1200px) {
+	.container {
+		width: 1170px;
+	}
+}

@@ -1,0 +1,6 @@
+@import url("https://fonts.googleapis.com/css?family=Permanent+Marker");
+
+.form-error{
+    font-family: "Permanent Marker";
+    color: red;
+}
