@@ -1,14 +1,3 @@
-node_modules/
-client/node_modules/
-server/node_modules/
-*/.env
-
-server/.env.local
-server/.env.development.local
-server/.env.test.local
-server/.env.production.local
-
-client/.env.local
-client/.env.development.local
-client/.env.test.local
-client/.env.production.local
+*.sqlite3
+*.pyo
+*.pyc
