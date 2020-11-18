@@ -1,6 +1,103 @@
 @import url("https://fonts.googleapis.com/css?family=Permanent+Marker");
+@import url("https://fonts.googleapis.com/css?family=Product+Sans");
+@import url("https://fonts.googleapis.com/css?family=Google+Sans");
 
 .form-error{
     font-family: "Permanent Marker";
     color: red;
+}
+
+.form-icon{
+    width: 40px;
+    margin-bottom: 0.5rem;
+}
+
+.topnav{
+    float: left;
+    width: 100vw;
+}
+
+.navbar-icon{
+    float: left;
+}
+.nav-text{
+    float: left;
+    position: relative;
+    vertical-align: middle;
+    margin-top: 0.75rem;
+    font-family: "Product Sans";
+    color: #5f6368;
+    padding-left: 1rem;
+}
+
+.nav-link{
+    color: #000;
+    text-decoration: none;
+}
+
+.nav-effect{box-shadow: 0 2px 30px -2px rgba(0,0,0,.2);}
+
+.float-right{
+    float: right;
+}
+
+.logout-icon{
+    width: 40px;
+    cursor: pointer;
+}
+
+.nav-padding{
+    padding: 10px 20px 10px;
+}
+.sidebar{
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 5;
+    top: 0;
+    left: 0;
+    overflow-x: hidden;
+    transition: 0.5s;
+    background-color: #FFF;
+    box-shadow: 10px 0 5px -2px #888;
+}
+
+.nav-ham{
+    float: left;
+    font-size: 1.8rem;
+    position: relative;
+    vertical-align: middle;
+    margin-right: 1rem;
+    cursor: pointer;
+}
+
+.close-sidebar{
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 36px;
+    margin-left: 50px;
+    cursor: pointer;
+}
+
+.sidebar-content{
+    margin: 20px
+}
+
+.sidebar-title{
+    margin-top: 50px;
+    font-family: "Google Sans";
+    font-size: 1.3rem;
+    border-bottom: 1px solid #888;
+    text-align: center;
+    cursor: pointer;
+}
+
+.sidebar-title-link{
+    text-decoration: none;
+    color: #414244;
+}
+
+.github-icon{
+    width: 1.3rem;
 }
