@@ -174,3 +174,13 @@
     text-decoration: none;
     float: left;
 }
+
+.error-page{
+    text-align: center;
+    font-family: "Roboto Condensed";
+}
+
+.form-topnav{
+    float: left;
+    padding: 15px;
+}

@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", () => {
         })
         .then(response => response.json())
         .then(result => {
-            window.location = `/form/${result.code}`
+            window.location = `/form/${result.code}/edit`
         })
     })
 })

@@ -1,10 +1,14 @@
 {% extends 'index/layout.html' %}
 {% load static %}
 {% block script %}
-<script src="{% static 'lib/react.js' %}"></script>
-<script src="{% static 'lib/react-dom.js' %}"></script>
-<script src="{% static 'lib/babel.js' %}"></script>
-<script src="{% static 'index/form.jsx' %}" type="text/babel"></script>
+<script src="{% static 'lib/react.js' %}" defer></script>
+<script src="{% static 'lib/react-dom.js' %}" defer></script>
+<script src="{% static 'lib/babel.js' %}" defer></script>
+<script src="{% static 'lib/cookie.min.js' %}" defer></script>
+<script src="{% static 'index/form.jsx' %}" type="text/babel" defer></script>
+<script type = "text/babel">
+    ReactDOM.render(<Form code = "{{code}}" />, document.querySelector("#root"));
+</script>
 {% endblock %}
 {% block body %}
 <div id = "root">

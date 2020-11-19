@@ -92,5 +92,34 @@ def create_form(request):
         form.save()
         return JsonResponse({"message": "Sucess", "code": code})
 
-def form(request, code):
-    return render(request, "index/form.html")
+def edit_form(request, code):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect(reverse("login"))
+    formInfo = Form.objects.filter(code = code)
+    #Checking if form exists
+    if formInfo.count() == 0:
+        return HttpResponseRedirect(reverse("404"))
+    else: formInfo = formInfo[0]
+    #Checking if form creator is user
+    if formInfo.creator != request.user:
+        return HttpResponseRedirect(reverse("403"))
+    return render(request, "index/form.html", {
+        "code": code
+    })
+
+def form_info(request, code):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect(reverse("login"))
+    formInfo = Form.objects.filter(code = code)
+    #Checking if form exists
+    if formInfo.count() == 0:
+        return HttpResponseRedirect(reverse("404"))
+    else: formInfo = formInfo[0]
+    return JsonResponse({"form": formInfo})
+
+# Error handler
+def FourZeroThree(request):
+    return render(request, "error/403.html")
+
+def FourZeroFour(request):
+    return render(request, "error/404.html")

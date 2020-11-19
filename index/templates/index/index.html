@@ -25,6 +25,7 @@
                     <span>Google Forms CLONE</span>
                 </a>
             </h4>
+            <p class="text-label">Found bug? Submit an issue <a href="https://github.com/kimlimjustin/google-form-clone/issues" class="link">here</a></p>
             <p class="text-label">License: <a href="https://github.com/kimlimjustin/google-form-clone/blob/master/LICENSE" class="link">MIT</a></p>
             <p class="text-label">Source code: <a href="https://github.com/kimlimjustin/google-form-clone">
                 <img src = "{% static 'github.png' %}" class="github-icon" alt="GitHub"></a></p>
@@ -43,7 +44,7 @@
         <div class="form-list">
             <p class="forms-label">Your forms:</p>
             {% for i in forms %}
-            <a href = "{% url 'form' i.code %}" class="form-list-link">
+            <a href = "{% url 'edit_form' i.code %}" class="form-list-link">
                 <div class="form-box">
                     <div class="form-list-title"><h5 class="form-list-title-text">{{i.title}}</h5></div>
                     <p class="form-list-timestamp">{{i.createdAt}}</p>
