@@ -128,3 +128,49 @@
 .form-template-box:hover{
     border: 1px solid black;
 }
+
+.form-box{
+    width: 250px;
+    border: 1px solid rgb(182, 179, 179);
+    padding: 5px;
+    cursor: pointer;
+    margin: 10px;
+}
+
+.form-box:hover{
+    border: 1px solid darkblue;
+}
+
+.form-list{
+    float: left;
+    margin-top: 20px;
+}
+
+.form-list-title{
+    align-items: flex-end;
+    display: flex;
+    flex-direction: row;
+    position: relative;
+}
+
+.form-list-title-text{
+    text-align: left;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    text-overflow: ellipsis;
+    font-family: "Google Sans";
+    margin: 2.5px;
+}
+
+.form-list-timestamp{
+    margin: 2.5px ;
+    color: gray;
+}
+
+.form-list-link{
+    color: #000000;
+    text-decoration: none;
+    float: left;
+}

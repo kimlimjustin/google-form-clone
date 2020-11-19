@@ -12,7 +12,10 @@ import string
 def index(request):
     if not request.user.is_authenticated:
         return HttpResponseRedirect(reverse('login'))
-    return render(request, "index/index.html")
+    forms = Form.objects.filter(creator = request.user)
+    return render(request, "index/index.html", {
+        "forms": forms
+    })
 
 def login_view(request):
     #Check if the user is logged in
