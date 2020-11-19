@@ -2,6 +2,7 @@
 {% load static %}
 {% block script %}
 <script src = "{% static 'index/index.js' %}" defer></script>
+<script src="{% static 'index/cookie.min.js' %}" defer></script>
 {% endblock %}
 {% load static %}
 {% block body %}
@@ -28,6 +29,14 @@
             <p class="text-label">Source code: <a href="https://github.com/kimlimjustin/google-form-clone">
                 <img src = "{% static 'github.png' %}" class="github-icon" alt="GitHub"></a></p>
             <p class="text-label">Support creator by <a href="https://github.com/kimlimjustin/google-form-clone" class="link">give a star on GitHub</a></p>
+        </div>
+    </div>
+    <div class="create-form">
+        <div class="container">
+            <p class="forms-label">Start a new form</p>
+            <div class="form-template-box">
+                <img src = "{% static 'blank-form.png' %}" alt = "Blank form" title = "Blank form" id="create-blank-form">
+            </div>
         </div>
     </div>
 </div>

@@ -101,3 +101,30 @@
 .github-icon{
     width: 1.3rem;
 }
+
+.create-form{
+    background-color: #f1f3f4;
+    width: 100vw;
+    float: left;
+}
+
+.forms-label{
+    font-family: "Google Sans";
+    margin: 10px 10px 5px 10px;
+}
+
+.form-template-box{
+    width: 152px;
+    height: 114px;
+    margin: 5px 0 10px 0;
+    float: left;
+}
+
+.form-template-box img{
+    width: inherit;
+    float: left;
+}
+
+.form-template-box:hover{
+    border: 1px solid black;
+}
