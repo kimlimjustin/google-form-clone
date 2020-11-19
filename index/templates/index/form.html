@@ -1,0 +1,13 @@
+{% extends 'index/layout.html' %}
+{% load static %}
+{% block script %}
+<script src="{% static 'lib/react.js' %}"></script>
+<script src="{% static 'lib/react-dom.js' %}"></script>
+<script src="{% static 'lib/babel.js' %}"></script>
+<script src="{% static 'index/form.jsx' %}" type="text/babel"></script>
+{% endblock %}
+{% block body %}
+<div id = "root">
+
+</div>
+{% endblock %}

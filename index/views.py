@@ -88,3 +88,6 @@ def create_form(request):
         form.questions.add(question)
         form.save()
         return JsonResponse({"message": "Sucess", "code": code})
+
+def form(request, code):
+    return render(request, "index/form.html")
