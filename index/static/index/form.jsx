@@ -1,9 +1,13 @@
 const Form = (code) => {
     React.useEffect(() => {
         const csrf = Cookies.get('csrftoken');
-        fetch(`/form/${code}/api`, {
+        fetch(`/form/${code.code}/api`, {
             method: "GET",
             headers: {'X-CSRFToken': csrf},
+        })
+        .then(response => response.json())
+        .then(result => {
+            console.log(result)
         })
     }, [])
     return(

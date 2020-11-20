@@ -4,6 +4,7 @@ from django.db import IntegrityError
 from django.urls import reverse
 from django.contrib.auth import authenticate, login, logout
 from .models import User, Choices, Questions, Answer, Form, Responses
+from django.core import serializers
 import json
 import random
 import string
@@ -115,7 +116,14 @@ def form_info(request, code):
     if formInfo.count() == 0:
         return HttpResponseRedirect(reverse("404"))
     else: formInfo = formInfo[0]
-    return JsonResponse({"form": formInfo})
+    form_dict = serializers.serialize('json', [formInfo])
+    struct = json.loads(form_dict)
+    form_json = json.dumps(struct[0])
+    questions = formInfo.questions.all()
+    questions_json = serializers.serialize("json", questions)
+    choices = [i.choices.all() for i in questions]
+    choices_json = serializers.serialize("json", choices[0])
+    return JsonResponse({"form": form_json, "questions": questions_json, "choices": choices_json})
 
 # Error handler
 def FourZeroThree(request):
