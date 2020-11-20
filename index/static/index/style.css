@@ -195,6 +195,18 @@
     text-overflow: ellipsis;
 }
 
+.edit-on-click{
+    border: none;
+    font-size: 1.2rem;
+    transition: 1s;
+    overflow-y: hidden;
+}
+
+.edit-on-click:focus{
+    outline: none !important;
+    border-bottom: 1px solid #202124;
+}
+
 .nav-form-menu-icon{
     width: 1.5rem;
     margin: 10px 15px;
@@ -213,6 +225,29 @@
     padding: 10px 20px;
     float: left;
     margin: 0.2px 15px;
+}
+
+.question-box{
+    background-color: #FFF;
+}
+
+.form-title{
+    font-size: 2rem;
+    font-family: "Google Sans";
+    font-weight: normal;
+    margin: 10px;
+    width: -webkit-fill-available;
+}
+
+.form-description{
+    font-size: 1rem;
+    font-family: "Roboto Condensed";
+    margin: 10px;
+    width: -webkit-fill-available;
+}
+
+.form-title-box{
+    border-bottom: 1px solid #ddd;
 }
 
 @media only screen and (max-width: 768px){
