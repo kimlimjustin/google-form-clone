@@ -116,14 +116,39 @@ def form_info(request, code):
     if formInfo.count() == 0:
         return HttpResponseRedirect(reverse("404"))
     else: formInfo = formInfo[0]
-    form_dict = serializers.serialize('json', [formInfo])
-    struct = json.loads(form_dict)
-    form_json = json.dumps(struct[0])
-    questions = formInfo.questions.all()
-    questions_json = serializers.serialize("json", questions)
-    choices = [i.choices.all() for i in questions]
-    choices_json = serializers.serialize("json", choices[0])
-    return JsonResponse({"form": form_json, "questions": questions_json, "choices": choices_json})
+    # Create a new python directory
+    form = {}
+    form["title"] = formInfo.title
+    form["description"] = formInfo.description
+    form["code"] = formInfo.code
+    form["background_color"] = formInfo.background_color
+    form["text_color"] = formInfo.text_color
+    form["collect_email"] = formInfo.collect_email
+    form["authenticated_responder"] = formInfo.authenticated_responder
+    form["edit_after_submit"] = formInfo.edit_after_submit
+    form["see_response"] = formInfo.see_response
+    form["confirmation_message"] = formInfo.confirmation_message
+    form["is_quiz"] = formInfo.is_quiz
+    form["allow_view_score"] = formInfo.allow_view_score
+    form["createdAt"] = formInfo.createdAt
+    form["updatedAt"] = formInfo.updatedAt
+    form["questions"] = []
+    for i in formInfo.questions.all():
+        choices = []
+        for j in i.choices.all():
+            choices.append({
+                "choice": j.choice,
+                "is_answer": j.is_answer
+            })
+        form["questions"].append({
+            "question": i.question,
+            "question_type": i.question_type,
+            "required": i.required,
+            "answer_key": i.answer_key,
+            "score": i.score,
+            "choices": choices
+        })
+    return JsonResponse(form)
 
 # Error handler
 def FourZeroThree(request):
