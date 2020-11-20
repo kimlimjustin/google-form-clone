@@ -181,6 +181,36 @@
 }
 
 .form-topnav{
-    float: left;
     padding: 15px;
+    overflow: hidden;
+    background-color: #fff;
+}
+
+.nav-form-title{
+    width: 300px;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    text-overflow: ellipsis;
+}
+
+.nav-form-menu-icon{
+    width: 1.5rem;
+    margin: 10px 15px;
+    cursor: pointer;
+    float: left;
+}
+
+.send-form-btn{
+    position: relative;
+    background-color: #673ab7;
+    color: #ddd;
+    font-size: 1rem;
+    font-family: "Google Sans";
+    vertical-align: middle;
+    border: 1px solid #ddd;
+    padding: 10px 20px;
+    float: left;
+    margin: 0.2px 15px;
 }

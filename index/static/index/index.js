@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", () => {
             method: "POST",
             headers: {'X-CSRFToken': csrf},
             body: JSON.stringify({
-                title: "Untitled form"
+                title: "Untitled Form"
             })
         })
         .then(response => response.json())
