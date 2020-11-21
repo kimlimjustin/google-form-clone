@@ -184,6 +184,39 @@ def edit_description(request, code):
         formInfo.save()
         return JsonResponse({"message": "Success", "description": formInfo.description})
 
+def edit_bg_color(request, code):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect(reverse("login"))
+    formInfo = Form.objects.filter(code = code)
+    #Checking if form exists
+    if formInfo.count() == 0:
+        return HttpResponseRedirect(reverse("404"))
+    else: formInfo = formInfo[0]
+    #Checking if form creator is user
+    if formInfo.creator != request.user:
+        return HttpResponseRedirect(reverse("403"))
+    if request.method == "POST":
+        data = json.loads(request.body)
+        formInfo.background_color = data["bgColor"]
+        formInfo.save()
+        return JsonResponse({"message": "Success", "bgColor": formInfo.background_color})
+
+def edit_text_color(request, code):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect(reverse("login"))
+    formInfo = Form.objects.filter(code = code)
+    #Checking if form exists
+    if formInfo.count() == 0:
+        return HttpResponseRedirect(reverse("404"))
+    else: formInfo = formInfo[0]
+    #Checking if form creator is user
+    if formInfo.creator != request.user:
+        return HttpResponseRedirect(reverse("403"))
+    if request.method == "POST":
+        data = json.loads(request.body)
+        formInfo.text_color = data["textColor"]
+        formInfo.save()
+        return JsonResponse({"message": "Success", "textColor": formInfo.text_color})
 
 # Error handler
 def FourZeroThree(request):
