@@ -1,15 +1,15 @@
 function textAreaAdjust(element) {
     element.target.style.height = "auto";
-    element.target.style.height = (element.target.scrollHeight)+"px";
+    element.target.style.height = (10 + element.target.scrollHeight)+"px";
 }
 const Form = (code) => {
     const [formInfo, setFormInfo] = React.useState({});
     const [width, setWidth] = React.useState(0);
     const [title, setTitle] = React.useState('');
     const [description, setDescription] = React.useState('');
-    
+    const csrf = Cookies.get('csrftoken');
+
     React.useEffect(() => {
-        const csrf = Cookies.get('csrftoken');
         fetch(`/form/${code.code}/api`, {
             method: "GET",
             headers: {'X-CSRFToken': csrf},
@@ -20,11 +20,24 @@ const Form = (code) => {
             document.body.style.backgroundColor = result.background_color;
             document.body.style.color = result.text_color;
             setTitle(result.title)
+            setDescription(result.description)
         })
     }, [])
 
     React.useEffect(() => {
-        if(title) document.title = `${title} - Google Form CLONE`
+        if(title){
+            fetch(`/form/${code.code}/edit_title`, {
+                method: "POST",
+                headers: {'X-CSRFToken': csrf},
+                body: JSON.stringify({
+                    "title": title
+                })
+            })
+            .then(response => response.json())
+            .then(result => {
+                document.title = `${result.title} - Google Form CLONE`  
+            })
+        }
     }, [title])
 
     React.useEffect(() => {
@@ -33,6 +46,26 @@ const Form = (code) => {
             setWidth(window.innerWidth);
         })
     }, [])
+
+    React.useEffect(() => {
+        if(description){
+            fetch(`/form/${code.code}/edit_description`, {
+                method: "POST",
+                headers: {'X-CSRFToken': csrf},
+                body: JSON.stringify({
+                    "description": description
+                })
+            })
+            .then(response => response.json())
+            .then(result => {})
+        }
+    }, [description])
+
+    React.useEffect(() => {
+        document.querySelectorAll("textarea").forEach(tx => {
+            tx.style.height = tx.scrollHeight + 'px'
+        })
+    })
     
     return(
         <div className = "container-fluid">
@@ -60,8 +93,8 @@ const Form = (code) => {
                     <div className="form-title-box">
                         <input type = "text" className="form-title edit-on-click" value = {title} onChange = {({target: {value}}) => setTitle(value)} placeholder = "Form title" />
                     </div>
-                    <textarea className="form-description edit-on-click" rows="1" placeholder="Form description" value = {description} 
-                    onChange = {({target: {value}}) => setDescription(value)} onKeyUp = {textAreaAdjust}></textarea>
+                    <textarea className="form-description edit-on-click" rows="1" placeholder="Form description" value = {description}
+                      onChange = {({target: {value}}) => setDescription(value)} onKeyUp = {textAreaAdjust} ></textarea>
                 </div>
             </div>
         </div>

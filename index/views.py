@@ -150,6 +150,41 @@ def form_info(request, code):
         })
     return JsonResponse(form)
 
+def edit_title(request, code):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect(reverse("login"))
+    formInfo = Form.objects.filter(code = code)
+    #Checking if form exists
+    if formInfo.count() == 0:
+        return HttpResponseRedirect(reverse("404"))
+    else: formInfo = formInfo[0]
+    #Checking if form creator is user
+    if formInfo.creator != request.user:
+        return HttpResponseRedirect(reverse("403"))
+    if request.method == "POST":
+        data = json.loads(request.body)
+        formInfo.title = data["title"]
+        formInfo.save()
+        return JsonResponse({"message": "Success", "title": formInfo.title})
+
+def edit_description(request, code):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect(reverse("login"))
+    formInfo = Form.objects.filter(code = code)
+    #Checking if form exists
+    if formInfo.count() == 0:
+        return HttpResponseRedirect(reverse("404"))
+    else: formInfo = formInfo[0]
+    #Checking if form creator is user
+    if formInfo.creator != request.user:
+        return HttpResponseRedirect(reverse("403"))
+    if request.method == "POST":
+        data = json.loads(request.body)
+        formInfo.description = data["description"]
+        formInfo.save()
+        return JsonResponse({"message": "Success", "description": formInfo.description})
+
+
 # Error handler
 def FourZeroThree(request):
     return render(request, "error/403.html")

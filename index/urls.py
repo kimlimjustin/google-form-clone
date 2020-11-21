@@ -9,6 +9,8 @@ urlpatterns = [
     path('form/create', views.create_form, name="create_form"),
     path('form/<str:code>/edit', views.edit_form, name="edit_form"),
     path('form/<str:code>/api', views.form_info, name="form_info"),
+    path('form/<str:code>/edit_title', views.edit_title, name="edit_title"),
+    path('form/<str:code>/edit_description', views.edit_description, name="edit_description"),
     path('403', views.FourZeroThree, name="403"),
     path('404', views.FourZeroFour, name="404")
 ]
