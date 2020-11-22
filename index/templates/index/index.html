@@ -47,7 +47,11 @@
             <a href = "{% url 'edit_form' i.code %}" class="form-list-link">
                 <div class="form-box">
                     <div class="form-list-title"><h5 class="form-list-title-text">{{i.title}}</h5></div>
+                    {% if i.createdAt == i.updatedAt %}
                     <p class="form-list-timestamp">{{i.createdAt}}</p>
+                    {% else %}
+                    <p class="form-list-timestamp">{{i.updatedAt}}</p>
+                    {% endif %}
                 </div>
             </a>
             {% endfor %}

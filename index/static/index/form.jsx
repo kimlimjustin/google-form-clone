@@ -99,9 +99,23 @@ const Form = (code) => {
 
     React.useEffect(() => {
         document.querySelectorAll("textarea").forEach(tx => {
-            tx.style.height = tx.scrollHeight + 'px'
+            tx.style.height = "auto";
+            tx.style.height = 10 + tx.scrollHeight + 'px';
         })
     })
+
+    const editSetting = e => {
+        e.preventDefault()
+        fetch(`/form/${code.code}/edit_setting`, {
+            method: "POST",
+            headers: {'X-CSRFToken': csrf},
+            body: JSON.stringify({
+                "form": formInfo
+            })
+        })
+        .then(response => response.json())
+        .then(() => document.querySelector("#setting").style.display = "none")
+    }
 
     React.useEffect(() => {
         document.querySelector("#customize-theme-btn").addEventListener('click', () => {
@@ -110,23 +124,33 @@ const Form = (code) => {
         document.querySelector("#close-customize-theme").addEventListener("click", () => {
             document.querySelector("#customize-theme").style.display = "none";
         })
+        if(document.querySelector("#setting-btn")){
+            document.querySelector("#setting-btn").addEventListener('click', () => {
+                document.querySelector("#setting").style.display = "block";
+            })
+        }
+        document.querySelector("#close-setting").addEventListener('click', () => {
+            document.querySelector("#setting").style.display = "none";
+        })
         window.onclick = e => {
             if(e.target == document.querySelector("#customize-theme")) document.querySelector("#customize-theme").style.display = "none";
+            if(e.target == document.querySelector("#setting")) document.querySelector("#setting").style.display = "none";
         }
     })
-    
+
     return(
         <div className = "container-fluid">
             <div className="form-topnav">
                 <a href = "/">
                     <img src = "/static/Icon/icon.png" alt = "Google Forms Icon(CLONE)" className="navbar-icon form-icon" title = "Forms" />
                 </a>
-                <input class="nav-text nav-form-title edit-on-click" value  = {title} type="text" onChange = {({target: {value}}) => setTitle(value)} placeholder = "Form title" />
+                <input class="nav-text nav-form-title edit-on-click" value  = {title} type="text" onChange = {({target: {value}}) => setTitle(value)} 
+                placeholder = "Form title" />
                 {width > 768?
                 <div className="float-right">
                     <img src="/static/Icon/theme.png" alt="Theme icon" id="customize-theme-btn" title = "Customize theme" className="nav-form-menu-icon" />
                     <img src="/static/Icon/eye.png" alt="Preview icon" title = "Preview" className="nav-form-menu-icon" />
-                    <img src="/static/Icon/setting.png" alt="Setting icon" title = "Setting" className="nav-form-menu-icon" />
+                    <img src="/static/Icon/setting.png" alt="Setting icon" id="setting-btn" title = "Setting" className="nav-form-menu-icon" />
                     <button className = "btn send-form-btn">Send</button>
                     <img src="/static/Icon/options.png" alt="Options icon" title = "More" className="nav-form-menu-icon" />
                 </div>
@@ -139,8 +163,8 @@ const Form = (code) => {
             <div className="container">
                 <div className="margin-top-bottom box question-box">
                     <div className="form-title-box">
-                        <input type = "text" className="form-title edit-on-click" value = {title} onChange = {({target: {value}}) => setTitle(value)} placeholder = "Form title"
-                         style={{color: textColor}} />
+                        <input type = "text" className="form-title edit-on-click" value = {title} onChange = {({target: {value}}) => setTitle(value)} 
+                        placeholder = "Form title" style={{color: textColor}} />
                     </div>
                     <textarea className="form-description edit-on-click" rows="1" placeholder="Form description" value = {description} spellCheck = "false"
                       onChange = {({target: {value}}) => setDescription(value)} onKeyUp = {textAreaAdjust}  style={{color: textColor}}></textarea>
@@ -149,8 +173,8 @@ const Form = (code) => {
             <div className="modal" id="customize-theme">
                 <div className="modal-content">
                     <span className="modal-close-btn" id="close-customize-theme">&times;</span>
-                    <h1 className="customize-theme-title">Theme options</h1>
-                    <h3 className="customize-theme-subtitle">Background Color:</h3>
+                    <h1 className="modal-title">Theme options</h1>
+                    <h3 className="modal-subtitle">Background Color:</h3>
                     <input type="color"  value = {bgColor} list="bgColors" className="form-control" onChange = {({target: {value}}) => setBgColor(value)} />
                     <datalist id="bgColors">
                         <option value="#03a9f4"></option>
@@ -159,8 +183,9 @@ const Form = (code) => {
                         <option value = "#e1d8f1"></option>
                         <option value = "#d1c4e9"></option>
                         <option value = "#f6f6f6"></option>
+                        <option value="#f1f3f4"></option>
                     </datalist>
-                    <h3 className="customize-theme-subtitle">Text Color:</h3>
+                    <h3 className="modal-subtitle">Text Color:</h3>
                     <input type="color"  value = {textColor} list="textColors" className="form-control" onChange = {({target: {value}}) => setTextColor(value)} />
                     <datalist id="textColors">
                         <option value="#db4437"></option>
@@ -174,6 +199,70 @@ const Form = (code) => {
                         <option value="#272124"></option>
                     </datalist>
                 </div>
+            </div>
+            <div className="modal" id="setting">
+                <form className="modal-content" onSubmit = {editSetting}>
+                    <span className="modal-close-btn" id="close-setting">&times;</span>
+                    <h1 className = "modal-title">Setting</h1>
+                    <div className="modal-division">
+                        <div className="form-group">
+                            <h3 className="modal-subtitle">General</h3>
+                            <input type="checkbox" id="collect_email" checked = {formInfo.collect_email} onChange = {({target: {checked}}) => {
+                                if(checked) setFormInfo({...formInfo, collect_email: true})
+                                else setFormInfo({...formInfo, collect_email: false})
+                            }} />
+                            <label htmlFor="collect_email" className="setting-form-label">Collect email address</label>
+                        </div>
+                        <div className="form-group">
+                            <input type="checkbox" id="is_quiz" checked = {formInfo.is_quiz} onChange = {({target: {checked, value}}) => {
+                                if(checked) setFormInfo({...formInfo, is_quiz: true})
+                                else setFormInfo({...formInfo, is_quiz: false})
+                            }} />
+                            <label htmlFor="is_quiz" className="setting-form-label">Make this as a quiz</label>
+                        </div>
+                        <div className="form-group">
+                            <input type="checkbox" id="authenticated_responder" checked = {formInfo.authenticated_responder} onChange = {({target: {checked, value}}) => {
+                                if(checked) setFormInfo({...formInfo, authenticated_responder: true})
+                                else setFormInfo({...formInfo, authenticated_responder: false})
+                            }} />
+                            <label htmlFor="authenticated_responder" className="setting-form-label">Respondent account must be authenticated.</label>
+                        </div>
+                    </div>
+                    <div className="modal-division">
+                        <div className="form-group">
+                            <h3 className="modal-subtitle">Confirmation message:</h3>
+                            <textarea rows = "1" className="confirmation-msg-input edit-on-click" value={formInfo.confirmation_message} spellCheck = "false"
+                            onChange = {({target: {value}}) => setFormInfo({...formInfo, confirmation_message: value})} onKeyUp = {textAreaAdjust} />
+                        </div>
+                    </div>
+                    <div className="modal-division">
+                        <div className="form-group">
+                            <h3 className="modal-subtitle">Respondents can:</h3>
+                            <input type="checkbox" id="edit_after_submit" checked = {formInfo.edit_after_submit} onChange = {({target: {checked, value}}) => {
+                                if(checked) setFormInfo({...formInfo, edit_after_submit: true})
+                                else setFormInfo({...formInfo, edit_after_submit: false})
+                            }} />
+                            <label htmlFor="edit_after_submit" className="setting-form-label">Edit after submit</label>
+                        </div>
+                        <div className="form-group">
+                            <input type="checkbox" id="see_response" checked = {formInfo.see_response} onChange = {({target: {checked, value}}) => {
+                                if(checked) setFormInfo({...formInfo, see_response: true})
+                                else setFormInfo({...formInfo, see_response: false})
+                            }} />
+                            <label htmlFor="see_response" className="setting-form-label">View responses from other respondents</label>
+                        </div>
+                        <div className="form-group">
+                            <input type="checkbox" id="allow_view_score" checked = {formInfo.allow_view_score} onChange = {({target: {checked, value}}) => {
+                                if(checked) setFormInfo({...formInfo, allow_view_score: true})
+                                else setFormInfo({...formInfo, allow_view_score: false})
+                            }} />
+                            <label htmlFor="allow_view_score" className="setting-form-label">View score</label>
+                        </div>
+                        <div className="form-group">
+                            <input type="submit" value="Save" className="form-control btn btn-save-setting" />
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
     )

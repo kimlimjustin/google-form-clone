@@ -218,6 +218,30 @@ def edit_text_color(request, code):
         formInfo.save()
         return JsonResponse({"message": "Success", "textColor": formInfo.text_color})
 
+def edit_setting(request, code):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect(reverse("login"))
+    formInfo = Form.objects.filter(code = code)
+    #Checking if form exists
+    if formInfo.count() == 0:
+        return HttpResponseRedirect(reverse("404"))
+    else: formInfo = formInfo[0]
+    #Checking if form creator is user
+    if formInfo.creator != request.user:
+        return HttpResponseRedirect(reverse("403"))
+    if request.method == "POST":
+        data = json.loads(request.body)
+        new = data["form"]
+        formInfo.collect_email = new["collect_email"]
+        formInfo.is_quiz = new["is_quiz"]
+        formInfo.authenticated_responder = new["authenticated_responder"]
+        formInfo.confirmation_message = new["confirmation_message"]
+        formInfo.edit_after_submit = new["edit_after_submit"]
+        formInfo.allow_view_score = new["allow_view_score"]
+        formInfo.see_response = new["see_response"]
+        formInfo.save()
+        return JsonResponse({'message': "Success"})
+
 # Error handler
 def FourZeroThree(request):
     return render(request, "error/403.html")

@@ -274,6 +274,7 @@
     max-height: 80%;
     overflow: auto;
     max-width: 600px;
+    border-radius: 10px;
 }
 
 .modal-close-btn{
@@ -289,17 +290,47 @@
     cursor: pointer;
 }
 
-.customize-theme-title{
+.modal-title{
     font-family: "Google Sans";
     font-size: 1.2rem;
     border-bottom: 1px solid rgb(233, 232, 232);
     margin-bottom: 0;
 }
 
-.customize-theme-subtitle{
+.modal-subtitle{
     font-family: "Roboto Condensed";
     font-size: 1rem;
     font-weight: normal;
+}
+
+.setting-form-label{
+    font-family: "Roboto Condensed";
+}
+
+.modal-division{
+    margin: 30px 0;
+}
+.confirmation-msg-input{
+    width: -webkit-fill-available;
+    border-bottom: 1px solid #202124;
+    min-height: 20px !important;
+}
+
+.setting-options{
+    position: relative;
+}
+.setting-option-cancel{
+    margin: 20px 10px;
+    cursor: pointer;
+    color: #84878b;
+
+}
+
+.btn-save-setting{
+    background-color: #673ab7;
+    color: #ddd;
+    font-size: 1rem;
+    font-family: "Google Sans";
 }
 @media only screen and (max-width: 768px){
     .nav-form-title{
@@ -317,6 +348,7 @@
         max-width: none;
         max-height: none;
         width: -webkit-fill-available;
-        height: 100%;
+        height: calc(100% - 40px);
+        border-radius: 0%;
     }
 }
