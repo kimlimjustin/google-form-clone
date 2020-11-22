@@ -343,6 +343,30 @@
 .setting-preview-form:hover{
     opacity: .5;
 }
+
+.danger-zone{
+    font-weight: bold;
+    font-family: "Google Sans";
+    font-size: 1.4rem;
+}
+
+.delete-form-title{
+    margin: 0;
+    font-family: "Roboto Condensed";
+}
+
+.delete-form-description{
+    margin: 0;
+    font-family: "Poppins";
+}
+
+.delete-form-btn{
+    font-size: 1rem;
+    font-family: "Poppins";
+    padding: 3px !important;
+    background-color: #E71C23;
+    color: #fff;
+}
 @media only screen and (max-width: 768px){
     .nav-form-title{
         width: 120px;

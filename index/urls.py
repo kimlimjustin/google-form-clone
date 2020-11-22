@@ -14,6 +14,7 @@ urlpatterns = [
     path('form/<str:code>/edit_background_color', views.edit_bg_color, name="edit_background_color"),
     path('form/<str:code>/edit_text_color', views.edit_text_color, name="edit_text_color"),
     path('form/<str:code>/edit_setting', views.edit_setting, name="edit_setting"),
+    path('form/<str:code>/delete', views.delete_form, name="delete_form"),
     path('403', views.FourZeroThree, name="403"),
     path('404', views.FourZeroFour, name="404")
 ]

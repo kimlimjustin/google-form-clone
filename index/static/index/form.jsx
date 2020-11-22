@@ -117,6 +117,17 @@ const Form = (code) => {
         .then(() => document.querySelector("#setting").style.display = "none")
     }
 
+    const deleteForm = e => {
+        e.preventDefault();
+        if(window.confirm("Are you sure? This action CANNOT be undone.")){
+            fetch(`/form/${code.code}/delete`, {
+                method: "DELETE",
+                headers: {'X-CSRFToken': csrf}
+            })
+            .then(() => window.location = "/")
+        }
+    }
+
     React.useEffect(() => {
         document.querySelector("#customize-theme-btn").addEventListener('click', () => {
             document.querySelector("#customize-theme").style.display = "block";
@@ -200,71 +211,81 @@ const Form = (code) => {
                 </div>
             </div>
             <div className="modal" id="setting">
-                <form className="modal-content" onSubmit = {editSetting}>
-                    <span className="modal-close-btn" id="close-setting">&times;</span>
-                    <h1 className = "modal-title">Setting</h1>
-                    {width<= 768?
-                        <h4 className="setting-preview-form"><a href = "/">Preview form here</a></h4>
-                    :null}
-                    <div className="modal-division">
-                        <div className="form-group">
-                            <h3 className="modal-subtitle">General</h3>
-                            <input type="checkbox" id="collect_email" checked = {formInfo.collect_email} onChange = {({target: {checked}}) => {
-                                if(checked) setFormInfo({...formInfo, collect_email: true})
-                                else setFormInfo({...formInfo, collect_email: false})
-                            }} />
-                            <label htmlFor="collect_email" className="setting-form-label">Collect email address</label>
+                <div className="modal-content">
+                    <form onSubmit = {editSetting}>
+                        <span className="modal-close-btn" id="close-setting">&times;</span>
+                        <h1 className = "modal-title">Setting</h1>
+                        {width<= 768?
+                            <h4 className="setting-preview-form"><a href = "/">Preview form here</a></h4>
+                        :null}
+                        <div className="modal-division">
+                            <div className="form-group">
+                                <h3 className="modal-subtitle">General</h3>
+                                <input type="checkbox" id="collect_email" checked = {formInfo.collect_email} onChange = {({target: {checked}}) => {
+                                    if(checked) setFormInfo({...formInfo, collect_email: true})
+                                    else setFormInfo({...formInfo, collect_email: false})
+                                }} />
+                                <label htmlFor="collect_email" className="setting-form-label">Collect email address</label>
+                            </div>
+                            <div className="form-group">
+                                <input type="checkbox" id="is_quiz" checked = {formInfo.is_quiz} onChange = {({target: {checked, value}}) => {
+                                    if(checked) setFormInfo({...formInfo, is_quiz: true})
+                                    else setFormInfo({...formInfo, is_quiz: false})
+                                }} />
+                                <label htmlFor="is_quiz" className="setting-form-label">Make this as a quiz</label>
+                            </div>
+                            <div className="form-group">
+                                <input type="checkbox" id="authenticated_responder" checked = {formInfo.authenticated_responder} onChange = {({target: {checked, value}}) => {
+                                    if(checked) setFormInfo({...formInfo, authenticated_responder: true})
+                                    else setFormInfo({...formInfo, authenticated_responder: false})
+                                }} />
+                                <label htmlFor="authenticated_responder" className="setting-form-label">Respondent account must be authenticated.</label>
+                            </div>
                         </div>
-                        <div className="form-group">
-                            <input type="checkbox" id="is_quiz" checked = {formInfo.is_quiz} onChange = {({target: {checked, value}}) => {
-                                if(checked) setFormInfo({...formInfo, is_quiz: true})
-                                else setFormInfo({...formInfo, is_quiz: false})
-                            }} />
-                            <label htmlFor="is_quiz" className="setting-form-label">Make this as a quiz</label>
+                        <div className="modal-division">
+                            <div className="form-group">
+                                <h3 className="modal-subtitle">Confirmation message:</h3>
+                                <textarea rows = "1" className="confirmation-msg-input edit-on-click" value={formInfo.confirmation_message} spellCheck = "false"
+                                onChange = {({target: {value}}) => setFormInfo({...formInfo, confirmation_message: value})} onKeyUp = {textAreaAdjust} />
+                            </div>
                         </div>
-                        <div className="form-group">
-                            <input type="checkbox" id="authenticated_responder" checked = {formInfo.authenticated_responder} onChange = {({target: {checked, value}}) => {
-                                if(checked) setFormInfo({...formInfo, authenticated_responder: true})
-                                else setFormInfo({...formInfo, authenticated_responder: false})
-                            }} />
-                            <label htmlFor="authenticated_responder" className="setting-form-label">Respondent account must be authenticated.</label>
+                        <div className="modal-division">
+                            <div className="form-group">
+                                <h3 className="modal-subtitle">Respondents can:</h3>
+                                <input type="checkbox" id="edit_after_submit" checked = {formInfo.edit_after_submit} onChange = {({target: {checked, value}}) => {
+                                    if(checked) setFormInfo({...formInfo, edit_after_submit: true})
+                                    else setFormInfo({...formInfo, edit_after_submit: false})
+                                }} />
+                                <label htmlFor="edit_after_submit" className="setting-form-label">Edit after submit</label>
+                            </div>
+                            <div className="form-group">
+                                <input type="checkbox" id="see_response" checked = {formInfo.see_response} onChange = {({target: {checked, value}}) => {
+                                    if(checked) setFormInfo({...formInfo, see_response: true})
+                                    else setFormInfo({...formInfo, see_response: false})
+                                }} />
+                                <label htmlFor="see_response" className="setting-form-label">View responses from other respondents</label>
+                            </div>
+                            <div className="form-group">
+                                <input type="checkbox" id="allow_view_score" checked = {formInfo.allow_view_score} onChange = {({target: {checked, value}}) => {
+                                    if(checked) setFormInfo({...formInfo, allow_view_score: true})
+                                    else setFormInfo({...formInfo, allow_view_score: false})
+                                }} />
+                                <label htmlFor="allow_view_score" className="setting-form-label">View score</label>
+                            </div>
+                            <div className="form-group">
+                                <input type="submit" value="Save" className="form-control btn btn-save-setting" />
+                            </div>
                         </div>
-                    </div>
-                    <div className="modal-division">
-                        <div className="form-group">
-                            <h3 className="modal-subtitle">Confirmation message:</h3>
-                            <textarea rows = "1" className="confirmation-msg-input edit-on-click" value={formInfo.confirmation_message} spellCheck = "false"
-                            onChange = {({target: {value}}) => setFormInfo({...formInfo, confirmation_message: value})} onKeyUp = {textAreaAdjust} />
-                        </div>
-                    </div>
-                    <div className="modal-division">
-                        <div className="form-group">
-                            <h3 className="modal-subtitle">Respondents can:</h3>
-                            <input type="checkbox" id="edit_after_submit" checked = {formInfo.edit_after_submit} onChange = {({target: {checked, value}}) => {
-                                if(checked) setFormInfo({...formInfo, edit_after_submit: true})
-                                else setFormInfo({...formInfo, edit_after_submit: false})
-                            }} />
-                            <label htmlFor="edit_after_submit" className="setting-form-label">Edit after submit</label>
-                        </div>
-                        <div className="form-group">
-                            <input type="checkbox" id="see_response" checked = {formInfo.see_response} onChange = {({target: {checked, value}}) => {
-                                if(checked) setFormInfo({...formInfo, see_response: true})
-                                else setFormInfo({...formInfo, see_response: false})
-                            }} />
-                            <label htmlFor="see_response" className="setting-form-label">View responses from other respondents</label>
-                        </div>
-                        <div className="form-group">
-                            <input type="checkbox" id="allow_view_score" checked = {formInfo.allow_view_score} onChange = {({target: {checked, value}}) => {
-                                if(checked) setFormInfo({...formInfo, allow_view_score: true})
-                                else setFormInfo({...formInfo, allow_view_score: false})
-                            }} />
-                            <label htmlFor="allow_view_score" className="setting-form-label">View score</label>
-                        </div>
-                        <div className="form-group">
-                            <input type="submit" value="Save" className="form-control btn btn-save-setting" />
-                        </div>
-                    </div>
-                </form>
+                    </form>
+                    <form className="modal-division" onSubmit = {deleteForm}>
+                        <fieldset className="form-group">
+                            <legend className="modal-subtitle text-danger danger-zone">Danger Zone</legend>
+                            <h3 className="delete-form-title">Delete this form</h3>
+                            <p className="delete-form-description">Once you delete a form, there is no going back. Please be certain.</p>
+                            <input type = "submit" className="form-control delete-form-btn" value="Delete" />
+                        </fieldset>
+                    </form>
+                </div>
             </div>
         </div>
     )
