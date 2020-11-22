@@ -152,12 +152,11 @@ const Form = (code) => {
                     <img src="/static/Icon/eye.png" alt="Preview icon" title = "Preview" className="nav-form-menu-icon" />
                     <img src="/static/Icon/setting.png" alt="Setting icon" id="setting-btn" title = "Setting" className="nav-form-menu-icon" />
                     <button className = "btn send-form-btn">Send</button>
-                    <img src="/static/Icon/options.png" alt="Options icon" title = "More" className="nav-form-menu-icon" />
                 </div>
                 :<div className="float-right">
                     <img src="/static/Icon/theme.png" alt="Theme icon" id="customize-theme-btn" title = "Customize theme" className="nav-form-menu-icon" />
                     <img src="/static/Icon/send.png" alt ="Send icon" title = "Send" className="nav-form-menu-icon" />
-                    <img src="/static/Icon/options.png" alt="Options icon" title = "More" className="nav-form-menu-icon" />
+                    <img src="/static/Icon/setting.png" alt="Setting icon" id="setting-btn" title = "Setting" className="nav-form-menu-icon" />
                 </div>}
             </div>
             <div className="container">
@@ -204,6 +203,9 @@ const Form = (code) => {
                 <form className="modal-content" onSubmit = {editSetting}>
                     <span className="modal-close-btn" id="close-setting">&times;</span>
                     <h1 className = "modal-title">Setting</h1>
+                    {width<= 768?
+                        <h4 className="setting-preview-form"><a href = "/">Preview form here</a></h4>
+                    :null}
                     <div className="modal-division">
                         <div className="form-group">
                             <h3 className="modal-subtitle">General</h3>

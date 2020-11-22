@@ -332,6 +332,17 @@
     font-size: 1rem;
     font-family: "Google Sans";
 }
+
+.setting-preview-form, .setting-preview-form a{
+    cursor: pointer;
+    color: #bbb;
+    font-family: "Google Sans";
+    text-decoration: none;
+}
+
+.setting-preview-form:hover{
+    opacity: .5;
+}
 @media only screen and (max-width: 768px){
     .nav-form-title{
         width: 120px;
