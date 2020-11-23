@@ -179,6 +179,10 @@ const Form = (code) => {
                     <textarea className="form-description edit-on-click" rows="1" placeholder="Form description" value = {description} spellCheck = "false"
                       onChange = {({target: {value}}) => setDescription(value)} onKeyUp = {textAreaAdjust}  style={{color: textColor}}></textarea>
                 </div>
+                <div className="question-options">
+                    <img src = "/static/Icon/add.png" className="question-option-icon" title = "Add question" alt = "Add question icon" />
+                    <img src = "/static/Icon/eye.png" className = "question-option-icon" title = "Preview" alt = "Preview icon" />
+                </div>
             </div>
             <div className="modal" id="customize-theme">
                 <div className="modal-content">

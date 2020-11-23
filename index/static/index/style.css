@@ -367,9 +367,25 @@
     background-color: #E71C23;
     color: #fff;
 }
+
+.question-options{
+    background-color: #fff;
+    margin: 20px 0;
+    position: fixed;
+    top: 80%;
+    right: 0;
+    border: 1px solid #84878b;
+}
+
+.question-option-icon{
+    width: 2rem;
+    margin: 5px;
+    cursor: pointer;
+    display: block;
+}
 @media only screen and (max-width: 768px){
     .nav-form-title{
-        width: 120px;
+        width: 100px;
     }
 
     .form-list-link, .form-box{
