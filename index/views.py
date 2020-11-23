@@ -133,14 +133,21 @@ def form_info(request, code):
     form["createdAt"] = formInfo.createdAt
     form["updatedAt"] = formInfo.updatedAt
     form["questions"] = []
+    pk = 0
     for i in formInfo.questions.all():
         choices = []
+        choice_pk = 0
         for j in i.choices.all():
             choices.append({
+                "pk": choice_pk,
+                "id": j.id,
                 "choice": j.choice,
                 "is_answer": j.is_answer
             })
+            choice_pk += 1
         form["questions"].append({
+            "pk": pk,
+            "id": i.id,
             "question": i.question,
             "question_type": i.question_type,
             "required": i.required,
@@ -148,6 +155,7 @@ def form_info(request, code):
             "score": i.score,
             "choices": choices
         })
+        pk += 1
     return JsonResponse(form)
 
 def edit_title(request, code):

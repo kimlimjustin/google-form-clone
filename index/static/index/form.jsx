@@ -153,6 +153,9 @@ const Form = (code) => {
             if(e.target == document.querySelector("#setting")) document.querySelector("#setting").style.display = "none";
         }
     })
+    React.useEffect(() => {
+        console.log(formInfo)
+    }, [formInfo])
 
     return(
         <div className = "container-fluid">
@@ -192,6 +195,54 @@ const Form = (code) => {
                     </div>
                     :null}
                 </div>
+                {formInfo.questions && formInfo.questions.map(question => {
+                    return <div className="margin-top-bottom box question-box" key = {question.id}>
+                        <input type = "text" className = "question-title edit-on-click" value ={question.question} onChange = {({target: {value}}) => {
+                            let copy = Object.assign({}, formInfo);
+                            copy.questions[question.pk].question = value;
+                            setFormInfo(copy);
+                        }} />
+                        <select name="" className="question-type-select" value = {question.question_type} onChange = {({target: {value}}) => {
+                            let copy = Object.assign({}, formInfo);
+                            copy.questions[question.pk].question_type  = value;
+                            setFormInfo(copy);
+                        }}>
+                            <option value="short">Short answer</option>
+                            <option value="paragraph">Paragraph</option>
+                            <option value="multiple choice">Multiple choice</option>
+                            <option value="checkbox">checkbox</option>
+                        </select>
+                        {question.question_type == "multiple choice"?
+                        <div className="choices">
+                            {question.choices.map(choice => {
+                                return <div className="choice">
+                                    <input type = "radio" id = {choice.id} disabled />
+                                    <label htmlFor = {choice.id}>
+                                        <input type = "text" value = {choice.choice} onChange = {({target: {value}}) => {
+                                            let copy = Object.assign({}, formInfo);
+                                            copy.questions[question.pk].choices[choice.pk].choice = value;
+                                            setFormInfo(copy);
+                                        }} className="edit-choice" />
+                                    </label>
+                                    <span className="remove-option" title = "Remove">&times;</span>
+                                </div>
+                            })}
+                            <div className="choice">
+                                <input type = "radio" id = "add-choice" disabled />
+                                <label htmlFor = "add-choice" className="add-option">Add option</label>
+                            </div>
+                        </div>
+                        :null}
+                        <div className="choice-option">
+                            <input type="checkbox" id="required-checkbox" checked = {question.required} onChange = {({target: {checked}}) => {
+                                let copy = Object.assign({}, formInfo);
+                                copy.questions[question.pk].required  = checked;
+                                setFormInfo(copy);
+                            }} />
+                            <label className="required" htmlFor = "required-checkbox">Required</label>
+                        </div>
+                    </div>
+                })}
                 <div className="question-options">
                     <img src = "/static/Icon/add.png" className="question-option-icon" title = "Add question" alt = "Add question icon" />
                     <img src = "/static/Icon/eye.png" className = "question-option-icon" title = "Preview" alt = "Preview icon" />
@@ -256,7 +307,7 @@ const Form = (code) => {
                                     if(checked) setFormInfo({...formInfo, authenticated_responder: true})
                                     else setFormInfo({...formInfo, authenticated_responder: false})
                                 }} />
-                                <label htmlFor="authenticated_responder" className="setting-form-label">Respondent account must be authenticated.</label>
+                                <label htmlFor="authenticated_responder" className="setting-form-label">Respondent account must be authenticated. (Signed in required)</label>
                             </div>
                         </div>
                         <div className="modal-division">
