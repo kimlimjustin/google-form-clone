@@ -143,6 +143,11 @@ const Form = (code) => {
         document.querySelector("#close-setting").addEventListener('click', () => {
             document.querySelector("#setting").style.display = "none";
         })
+        if(document.querySelector("#open-setting")){
+            document.querySelector("#open-setting").addEventListener('click', () => {
+                document.querySelector("#setting").style.display = "block";
+            })
+        }
         window.onclick = e => {
             if(e.target == document.querySelector("#customize-theme")) document.querySelector("#customize-theme").style.display = "none";
             if(e.target == document.querySelector("#setting")) document.querySelector("#setting").style.display = "none";
@@ -178,6 +183,14 @@ const Form = (code) => {
                     </div>
                     <textarea className="form-description edit-on-click" rows="1" placeholder="Form description" value = {description} spellCheck = "false"
                       onChange = {({target: {value}}) => setDescription(value)} onKeyUp = {textAreaAdjust}  style={{color: textColor}}></textarea>
+                    {formInfo.collect_email?
+                    <div className="collect-email">
+                        <h3 className="question-title">Email address <span className="require-star">*</span></h3>
+                        <input type="text" autoComplete="off" aria-label="Valid email address" disabled dir = "auto" className="require-email-edit"
+                        placeholder = "Valid email address" />
+                        <p className="collect-email-desc">This form is collecting email addresses. <span id="open-setting">Change settings</span></p>
+                    </div>
+                    :null}
                 </div>
                 <div className="question-options">
                     <img src = "/static/Icon/add.png" className="question-option-icon" title = "Add question" alt = "Add question icon" />

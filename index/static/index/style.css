@@ -383,6 +383,36 @@
     cursor: pointer;
     display: block;
 }
+
+.collect-email{
+    margin: 10px;
+}
+
+.question-title{
+    font-family: "Google Sans";
+    font-size: 1.3rem;
+}
+
+.require-star{
+    color: #E71C23;
+}
+
+.require-email-edit{
+    padding: 5px;
+    border: none;
+    border-bottom: 1px solid #84878b;
+    width: 50%;
+}
+
+.collect-email-desc{
+    color: #70757a;
+    margin: 10px 0;
+}
+
+#open-setting{
+    color: #1a73e8;
+    cursor: pointer;
+}
 @media only screen and (max-width: 768px){
     .nav-form-title{
         width: 100px;
