@@ -42,12 +42,12 @@
         </div>
         {% for question in form.questions.all %}
         <div class="margin-top-bottom box question-box">
-            <input type="text" id="" class="question-title edit-on-click" value="{{question.question}}">
-            <select class="question-type-select" value = "{{question.question_type}}">
+            <input type="text" id="input-question" data-id="{{question.id}}" class="question-title edit-on-click" value="{{question.question}}">
+            <select class="question-type-select" id="input-question-type" data-id="{{question.id}}">
                 <option value="short">Short answer</option>
                 <option value="paragraph">Paragraph</option>
-                <option value="multiple choice">Multiple choice</option>
-                <option value="checkbox">checkbox</option>
+                <option value="multiple choice" {% if question.question_type == "multiple choice" %}selected{% endif %}>Multiple choice</option>
+                <option value="checkbox">Checkbox</option>
             </select>
             {% if question.question_type == "multiple choice" %}
                 {% for choice in question.choices.all %}
@@ -65,7 +65,7 @@
                 </div>
             {% endif %}
             <div class="choice-option">
-                <input type="checkbox" id="required-checkbox">
+                <input type="checkbox" id="required-checkbox" data-id="{{question.id}}" {% if question.required %}checked{% endif %}>
                 <label for="required-checkbox" class="required">Required</label>
             </div>
         </div>

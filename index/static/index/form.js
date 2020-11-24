@@ -107,4 +107,40 @@ document.addEventListener("DOMContentLoaded", () => {
             .then(() => window.location = "/")
         }
     })
+    document.querySelector("#input-question").addEventListener('input', function(){
+        fetch('edit_question', {
+            method: "POST",
+            headers: {'X-CSRFToken': csrf},
+            body: JSON.stringify({
+                id: this.dataset.id,
+                question: this.value,
+                question_type: document.querySelector("#input-question-type").value,
+                required: document.querySelector("#required-checkbox").checked
+            })
+        })
+    })
+    document.querySelector("#input-question-type").addEventListener('input', function(){
+        fetch('edit_question', {
+            method: "POST",
+            headers: {'X-CSRFToken': csrf},
+            body: JSON.stringify({
+                id: this.dataset.id,
+                question: document.querySelector("#input-question").value,
+                question_type: this.value,
+                required: document.querySelector("#required-checkbox").checked
+            })
+        })
+    })
+    document.querySelector("#required-checkbox").addEventListener('input', function(){
+        fetch('edit_question', {
+            method: "POST",
+            headers: {'X-CSRFToken': csrf},
+            body: JSON.stringify({
+                id: this.dataset.id,
+                question: document.querySelector("#input-question").value,
+                question_type: document.querySelector("#input-question-type").value,
+                required: this.checked
+            })
+        })
+    })
 })

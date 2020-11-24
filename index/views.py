@@ -109,56 +109,6 @@ def edit_form(request, code):
         "form": formInfo
     })
 
-"""def form_info(request, code):
-    if not request.user.is_authenticated:
-        return HttpResponseRedirect(reverse("login"))
-    formInfo = Form.objects.filter(code = code)
-    #Checking if form exists
-    if formInfo.count() == 0:
-        return HttpResponseRedirect(reverse("404"))
-    else: formInfo = formInfo[0]
-    # Create a new python directory
-    form = {}
-    form["title"] = formInfo.title
-    form["description"] = formInfo.description
-    form["code"] = formInfo.code
-    form["background_color"] = formInfo.background_color
-    form["text_color"] = formInfo.text_color
-    form["collect_email"] = formInfo.collect_email
-    form["authenticated_responder"] = formInfo.authenticated_responder
-    form["edit_after_submit"] = formInfo.edit_after_submit
-    form["see_response"] = formInfo.see_response
-    form["confirmation_message"] = formInfo.confirmation_message
-    form["is_quiz"] = formInfo.is_quiz
-    form["allow_view_score"] = formInfo.allow_view_score
-    form["createdAt"] = formInfo.createdAt
-    form["updatedAt"] = formInfo.updatedAt
-    form["questions"] = []
-    pk = 0
-    for i in formInfo.questions.all():
-        choices = []
-        choice_pk = 0
-        for j in i.choices.all():
-            choices.append({
-                "pk": choice_pk,
-                "id": j.id,
-                "choice": j.choice,
-                "is_answer": j.is_answer
-            })
-            choice_pk += 1
-        form["questions"].append({
-            "pk": pk,
-            "id": i.id,
-            "question": i.question,
-            "question_type": i.question_type,
-            "required": i.required,
-            "answer_key": i.answer_key,
-            "score": i.score,
-            "choices": choices
-        })
-        pk += 1
-    return JsonResponse(form)"""
-
 def edit_title(request, code):
     if not request.user.is_authenticated:
         return HttpResponseRedirect(reverse("login"))
@@ -272,6 +222,32 @@ def delete_form(request, code):
                 j.delete()
             i.delete()
         formInfo.delete()
+        return JsonResponse({'message': "Success"})
+
+def edit_question(request, code):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect(reverse("login"))
+    formInfo = Form.objects.filter(code = code)
+    #Checking if form exists
+    if formInfo.count() == 0:
+        return HttpResponseRedirect(reverse('404'))
+    else: formInfo = formInfo[0]
+    #Checking if form creator is user
+    if formInfo.creator != request.user:
+        return HttpResponseRedirect(reverse("403"))
+    if request.method == "POST":
+        data = json.loads(request.body)
+        question_id = data["id"]
+        question = Questions.objects.filter(id = question_id)
+        if question.count() == 0:
+            return HttpResponseRedirect(reverse("404"))
+        else: question = question[0]
+        question.question = data["question"]
+        question.question_type = data["question_type"]
+        question.required = data["required"]
+        if(data.get("score")): question.score = data["score"]
+        if(data.get("answer_key")): question.answer_key = data["answer_key"]
+        question.save()
         return JsonResponse({'message': "Success"})
 
 # Error handler
