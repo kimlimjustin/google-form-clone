@@ -250,6 +250,68 @@ def edit_question(request, code):
         question.save()
         return JsonResponse({'message': "Success"})
 
+def edit_choice(request, code):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect(reverse("login"))
+    formInfo = Form.objects.filter(code = code)
+    #Checking if form exists
+    if formInfo.count() == 0:
+        return HttpResponseRedirect(reverse('404'))
+    else: formInfo = formInfo[0]
+    #Checking if form creator is user
+    if formInfo.creator != request.user:
+        return HttpResponseRedirect(reverse("403"))
+    if request.method == "POST":
+        data = json.loads(request.body)
+        choice_id = data["id"]
+        choice = Choices.objects.filter(id = choice_id)
+        if choice.count() == 0:
+            return HttpResponseRedirect(reverse("404"))
+        else: choice = choice[0]
+        choice.choice = data["choice"]
+        if(data.get('is_answer')): choice.is_answer = data["is_answer"]
+        choice.save()
+        return JsonResponse({'message': "Success"})
+
+def add_choice(request, code):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect(reverse("login"))
+    formInfo = Form.objects.filter(code = code)
+    #Checking if form exists
+    if formInfo.count() == 0:
+        return HttpResponseRedirect(reverse('404'))
+    else: formInfo = formInfo[0]
+    #Checking if form creator is user
+    if formInfo.creator != request.user:
+        return HttpResponseRedirect(reverse("403"))
+    if request.method == "POST":
+        data = json.loads(request.body)
+        choice = Choices(choice="Option")
+        choice.save()
+        formInfo.questions.get(pk = data["question"]).choices.add(choice)
+        formInfo.save()
+        return JsonResponse({"message": "Success", "choice": choice.choice, "id": choice.id})
+
+def remove_choice(request, code):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect(reverse("login"))
+    formInfo = Form.objects.filter(code = code)
+    #Checking if form exists
+    if formInfo.count() == 0:
+        return HttpResponseRedirect(reverse('404'))
+    else: formInfo = formInfo[0]
+    #Checking if form creator is user
+    if formInfo.creator != request.user:
+        return HttpResponseRedirect(reverse("403"))
+    if request.method == "POST":
+        data = json.loads(request.body)
+        choice = Choices.objects.filter(pk = data["id"])
+        if choice.count() == 0:
+            return HttpResponseRedirect(reverse("404"))
+        else: choice = choice[0]
+        choice.delete()
+        return JsonResponse({"message": "Success"})
+
 # Error handler
 def FourZeroThree(request):
     return render(request, "error/403.html")

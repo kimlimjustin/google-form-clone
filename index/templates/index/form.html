@@ -50,19 +50,21 @@
                 <option value="checkbox">Checkbox</option>
             </select>
             {% if question.question_type == "multiple choice" %}
+            <div class="choices">
                 {% for choice in question.choices.all %}
                     <div class="choice">
                         <input type="radio" id="{{choice.id}}" disabled>
                         <label for="{{choice.id}}">
-                            <input type="text" value="{{choice.choice}}" class="edit-choice">
+                            <input type="text" value="{{choice.choice}}" class="edit-choice" data-id="{{choice.id}}">
                         </label>
-                        <span class="remove-option" title = "Remove">&times;</span>
+                        <span class="remove-option" title = "Remove" data-id="{{choice.id}}">&times;</span>
                     </div>
                 {% endfor %}
                 <div class="choice">
                     <input type = "radio" id = "add-choice" disabled />
-                    <label for = "add-choice" class="add-option">Add option</label>
+                    <label for = "add-choice" class="add-option" id="add-option" data-question="{{question.id}}">Add option</label>
                 </div>
+            </div>
             {% endif %}
             <div class="choice-option">
                 <input type="checkbox" id="required-checkbox" data-id="{{question.id}}" {% if question.required %}checked{% endif %}>

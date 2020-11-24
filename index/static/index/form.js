@@ -130,6 +130,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 required: document.querySelector("#required-checkbox").checked
             })
         })
+        if(this.value !== "multiple choice" && this.value !== "checkbox"){
+            document.querySelector(".choices").parentNode.removeChild(document.querySelector(".choices"))
+        }
     })
     document.querySelector("#required-checkbox").addEventListener('input', function(){
         fetch('edit_question', {
@@ -141,6 +144,61 @@ document.addEventListener("DOMContentLoaded", () => {
                 question_type: document.querySelector("#input-question-type").value,
                 required: this.checked
             })
+        })
+    })
+    const editChoice = () => {
+        document.querySelectorAll(".edit-choice").forEach(choice => {
+            choice.addEventListener("input", function(){
+                fetch('edit_choice', {
+                    method: "POST",
+                    headers: {'X-CSRFToken': csrf},
+                    body: JSON.stringify({
+                        "id": this.dataset.id,
+                        "choice": this.value
+                    })
+                })
+            })
+        })
+    }
+    editChoice()
+    const removeOption = () => {
+        document.querySelectorAll(".remove-option").forEach(ele => {
+            ele.addEventListener("click",function(){
+                fetch('remove_choice', {
+                    method: "POST",
+                    headers: {'X-CSRFToken': csrf},
+                    body: JSON.stringify({
+                        "id": this.dataset.id
+                    })
+                })
+                .then(() => {
+                    this.parentNode.parentNode.removeChild(this.parentNode)
+                })
+            })
+        })
+    }
+    removeOption()
+    document.querySelector("#add-option").addEventListener("click", function(){
+        fetch('add_choice', {
+            method: "POST",
+            headers: {'X-CSRFToken': csrf},
+            body: JSON.stringify({
+                "question": this.dataset.question
+            })
+        })
+        .then(response => response.json())
+        .then(result => {
+            let element = document.createElement("div");
+            element.classList.add('choice');
+            element.innerHTML = `<input type="radio" id="${result["id"]}" disabled>
+            <label for="${result["id"]}">
+                <input type="text" value="${result["choice"]}" class="edit-choice" data-id="${result["id"]}">
+            </label>
+            <span class="remove-option" title = "Remove" data-id="${result["id"]}">&times;</span>`;
+            let choices = document.querySelector(".choices");
+            choices.insertBefore(element, choices.childNodes[choices.childNodes.length -2]);
+            editChoice()
+            removeOption()
         })
     })
 })
