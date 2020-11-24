@@ -105,10 +105,11 @@ def edit_form(request, code):
     if formInfo.creator != request.user:
         return HttpResponseRedirect(reverse("403"))
     return render(request, "index/form.html", {
-        "code": code
+        "code": code,
+        "form": formInfo
     })
 
-def form_info(request, code):
+"""def form_info(request, code):
     if not request.user.is_authenticated:
         return HttpResponseRedirect(reverse("login"))
     formInfo = Form.objects.filter(code = code)
@@ -156,7 +157,7 @@ def form_info(request, code):
             "choices": choices
         })
         pk += 1
-    return JsonResponse(form)
+    return JsonResponse(form)"""
 
 def edit_title(request, code):
     if not request.user.is_authenticated:
@@ -171,8 +172,12 @@ def edit_title(request, code):
         return HttpResponseRedirect(reverse("403"))
     if request.method == "POST":
         data = json.loads(request.body)
-        formInfo.title = data["title"]
-        formInfo.save()
+        if len(data["title"]) > 0:
+            formInfo.title = data["title"]
+            formInfo.save()
+        else:
+            formInfo.title = formInfo.title[0]
+            formInfo.save()
         return JsonResponse({"message": "Success", "title": formInfo.title})
 
 def edit_description(request, code):
@@ -239,14 +244,13 @@ def edit_setting(request, code):
         return HttpResponseRedirect(reverse("403"))
     if request.method == "POST":
         data = json.loads(request.body)
-        new = data["form"]
-        formInfo.collect_email = new["collect_email"]
-        formInfo.is_quiz = new["is_quiz"]
-        formInfo.authenticated_responder = new["authenticated_responder"]
-        formInfo.confirmation_message = new["confirmation_message"]
-        formInfo.edit_after_submit = new["edit_after_submit"]
-        formInfo.allow_view_score = new["allow_view_score"]
-        formInfo.see_response = new["see_response"]
+        formInfo.collect_email = data["collect_email"]
+        formInfo.is_quiz = data["is_quiz"]
+        formInfo.authenticated_responder = data["authenticated_responder"]
+        formInfo.confirmation_message = data["confirmation_message"]
+        formInfo.edit_after_submit = data["edit_after_submit"]
+        formInfo.allow_view_score = data["allow_view_score"]
+        formInfo.see_response = data["see_response"]
         formInfo.save()
         return JsonResponse({'message': "Success"})
 

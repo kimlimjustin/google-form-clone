@@ -1,17 +1,162 @@
 {% extends 'index/layout.html' %}
+{% block title %}
+{{form.title}} ~ Google Forms CLONE
+{% endblock %}
 {% load static %}
 {% block script %}
-<script src="{% static 'lib/react.js' %}" defer></script>
-<script src="{% static 'lib/react-dom.js' %}" defer></script>
-<script src="{% static 'lib/babel.js' %}" defer></script>
-<script src="{% static 'lib/cookie.min.js' %}" defer></script>
-<script src="{% static 'index/form.jsx' %}" type="text/babel" defer></script>
-<script type = "text/babel">
-    ReactDOM.render(<Form code = "{{code}}" />, document.querySelector("#root"));
-</script>
+<script src="{% static 'index/form.js' %}"></script>
+<script src="{% static 'lib/cookie.min.js' %}"></script>
 {% endblock %}
 {% block body %}
-<div id = "root">
-
+<div class = "container-fluid">
+    <div class="form-topnav">
+        <a href = "/">
+            <img src = "/static/Icon/icon.png" alt = "Google Forms Icon(CLONE)" class="navbar-icon form-icon" title = "Forms" />
+        </a>
+        <input class="nav-text nav-form-title edit-on-click input-form-title" value  = "{{form.title}}" type="text">
+        <div class="float-right">
+            <img src="/static/Icon/theme.png" alt="Theme icon" id="customize-theme-btn" title = "Customize theme" class="nav-form-menu-icon" />
+            <img src="/static/Icon/eye.png" alt="Preview icon" title = "Preview" class="nav-form-menu-icon big-screen" />
+            <img src="/static/Icon/send.png" alt ="Send icon" title = "Send" class="nav-form-menu-icon small-screen" />
+            <img src="/static/Icon/setting.png" alt="Setting icon" title = "Setting" class="nav-form-menu-icon open-setting" />
+            <button class = "btn send-form-btn big-screen">Send</button>
+        </div>
+    </div>
+    <div class="container">
+        <span id="bg-color" style="display: none;">{{form.background_color}}</span>
+        <span id="text-color" style="display: none;">{{form.text_color}}</span>
+        <div class="margin-top-bottom box question-box">
+            <div class="form-title-box">
+                <input type="text" class="form-title edit-on-click input-form-title txt-clr" value="{{form.title}}">
+            </div>
+            <textarea class="form-description edit-on-click textarea-adjust txt-clr" rows="1" placeholder="Form description" spellCheck = "false"
+            id="input-form-description">{{form.description}}</textarea>
+            {% if form.collect_email %}
+            <div class="collect-email">
+                <h3 class="question-title">Email address <span class="require-star">*</span></h3>
+                <input type="text" autoComplete="off" aria-label="Valid email address" disabled dir = "auto" class="require-email-edit"
+                placeholder = "Valid email address" />
+                <p class="collect-email-desc">This form is collecting email addresses. <span class="open-setting">Change settings</span></p>
+            </div>
+            {% endif %}
+        </div>
+        {% for question in form.questions.all %}
+        <div class="margin-top-bottom box question-box">
+            <input type="text" id="" class="question-title edit-on-click" value="{{question.question}}">
+            <select class="question-type-select" value = "{{question.question_type}}">
+                <option value="short">Short answer</option>
+                <option value="paragraph">Paragraph</option>
+                <option value="multiple choice">Multiple choice</option>
+                <option value="checkbox">checkbox</option>
+            </select>
+            {% if question.question_type == "multiple choice" %}
+                {% for choice in question.choices.all %}
+                    <div class="choice">
+                        <input type="radio" id="{{choice.id}}" disabled>
+                        <label for="{{choice.id}}">
+                            <input type="text" value="{{choice.choice}}" class="edit-choice">
+                        </label>
+                        <span class="remove-option" title = "Remove">&times;</span>
+                    </div>
+                {% endfor %}
+                <div class="choice">
+                    <input type = "radio" id = "add-choice" disabled />
+                    <label for = "add-choice" class="add-option">Add option</label>
+                </div>
+            {% endif %}
+            <div class="choice-option">
+                <input type="checkbox" id="required-checkbox">
+                <label for="required-checkbox" class="required">Required</label>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <div class="modal" id="customize-theme">
+        <div class="modal-content">
+            <span class="modal-close-btn" id="close-customize-theme">&times;</span>
+            <h1 class="modal-title">Theme options</h1>
+            <h3 class="modal-subtitle">Background Color:</h3>
+            <input type="color"  value = "{{form.background_color}}" list="bgColors" class="form-control" id="input-bg-color" />
+            <datalist id="bgColors">
+                <option value="#03a9f4"></option>
+                <option value="#00bcd4"></option>
+                <option value="#7ff0e7"></option>
+                <option value = "#e1d8f1"></option>
+                <option value = "#d1c4e9"></option>
+                <option value = "#f6f6f6"></option>
+                <option value="#f1f3f4"></option>
+            </datalist>
+            <h3 class="modal-subtitle">Text Color:</h3>
+            <input type="color"  value = {{form.text_color}} list="textColors" class="form-control" id="input-text-color" />
+            <datalist id="textColors">
+                <option value="#db4437"></option>
+                <option value="#673ab7"></option>
+                <option value="#3f51b5"></option>
+                <option value="#4285f4"></option>
+                <option value="#03a9f4"></option>
+                <option value="#00bcd4"></option>
+                <option value="#8a8a8a"></option>
+                <option value="#4c3d45"></option>
+                <option value="#272124"></option>
+            </datalist>
+        </div>
+    </div>
+    <div class="modal" id="setting">
+        <div class="modal-content">
+            <form id="setting-form">
+                <span class="modal-close-btn" id="close-setting">&times;</span>
+                <h1 class = "modal-title">Setting</h1>
+                <h4 class="setting-preview-form small-screen"><a href="">Preview form here</a></h4>
+                <div class="modal-division">
+                    <div class="form-group">
+                        <h3 class="modal-subtitle">General</h3>
+                        <input type="checkbox" id="collect_email"{% if form.collect_email %} checked {% endif %}>
+                        <label for="collect_email" class="setting-form-label">Collect email address</label>
+                    </div>
+                    <div class="form-group">
+                        <input type="checkbox" id="is_quiz" {% if form.is_quiz %} checked {% endif %}>
+                        <label for="is_quiz" class="setting-form-label">Make this as a quiz</label>
+                    </div>
+                    <div class="form-group">
+                        <input type="checkbox" id="authenticated_responder" {% if form.authenticated_responder %} checked {% endif %}>
+                        <label for="authenticated_responder" class="setting-form-label">Respondent account must be authenticated. (Signed in required)</label>
+                    </div>
+                </div>
+                <div class="modal-division">
+                    <div class="form-group">
+                        <h3 class="modal-subtitle">Confirmation message:</h3>
+                        <textarea rows="1" class="confirmation-msg-input edit-on-click textarea-adjust" spellcheck="false"
+                         id="comfirmation_message">{{form.confirmation_message}}</textarea>
+                    </div>
+                </div>
+                <div class="modal-division">
+                    <div class="form-group">
+                        <h3 class="modal-subtitle">Respondents can:</h3>
+                        <input type="checkbox" id="edit_after_submit" {% if form.edit_after_submit %}checked{% endif %}>
+                        <label for="edit_after_submit" class="setting-form-label">Edit after submit</label>
+                    </div>
+                    <div class="form-group">
+                        <input type="checkbox" id="see_response" {% if form.see_response %}checked{% endif %}>
+                        <label for="see_response" class="setting-form-label">View responses from other respondents</label>
+                    </div>
+                    <div class="form-group">
+                        <input type="checkbox" id="allow_view_score" {% if form.allow_view_score %}checked{% endif %}>
+                        <label for="allow_view_score" class="setting-form-label">View score</label>
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="Save" class="form-control btn btn-save-setting">
+                    </div>
+                </div>
+            </form>
+            <form id="delete-form" class="modal-division">
+                <fieldset class="form-group">
+                    <legend class="modal-subtitle text-danger danger-zone">Danger Zone</legend>
+                    <h3 class="delete-form-title">Delete this form</h3>
+                    <p class="delete-form-description">Once you delete a form, there is no going back. Please be certain.</p>
+                    <input type="submit" value="Delete" class="form-control delete-form-btn">
+                </fieldset>
+            </form>
+        </div>
+    </div>
 </div>
 {% endblock %}

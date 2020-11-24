@@ -422,7 +422,7 @@
 }
 
 .question-type-select{
-    width: calc(35% - 4px);
+    width: calc(35% - 8px);
     padding: 5px 35px 5px 5px;
     font-size: 1.2rem;
     border: 1px solid #ccc;
@@ -497,5 +497,15 @@
     .question-type-select{
         width: 100%;
         display: block;
+    }
+
+    .big-screen{
+        display: none;
+    }
+}
+
+@media only screen and (min-width: 768px){
+    .small-screen{
+        display: none;
     }
 }
