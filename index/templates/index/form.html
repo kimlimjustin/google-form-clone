@@ -47,10 +47,10 @@
                 <option value="short">Short answer</option>
                 <option value="paragraph">Paragraph</option>
                 <option value="multiple choice" {% if question.question_type == "multiple choice" %}selected{% endif %}>Multiple choice</option>
-                <option value="checkbox">Checkbox</option>
+                <option value="checkbox" {% if question.question_type == "checkbox" %}selected{% endif %}>Checkbox</option>
             </select>
             {% if question.question_type == "multiple choice" %}
-            <div class="choices">
+            <div class="choices" data-id="{{question.id}}">
                 {% for choice in question.choices.all %}
                     <div class="choice">
                         <input type="radio" id="{{choice.id}}" disabled>
@@ -62,7 +62,23 @@
                 {% endfor %}
                 <div class="choice">
                     <input type = "radio" id = "add-choice" disabled />
-                    <label for = "add-choice" class="add-option" id="add-option" data-question="{{question.id}}">Add option</label>
+                    <label for = "add-choice" class="add-option" id="add-option" data-question="{{question.id}}" data-type = "{{question.question_type}}">Add option</label>
+                </div>
+            </div>
+            {% elif question.question_type == "checkbox" %}
+            <div class="choices" data-id="{{question.id}}">
+                {% for choice in question.choices.all %}
+                    <div class="choice">
+                        <input type="checkbox" id="{{choice.id}}" disabled>
+                        <label for="{{choice.id}}">
+                            <input type="text" data-id="{{choice.id}}" class="edit-choice" value="{{choice.choice}}">
+                        </label>
+                        <span class="remove-option" title="Remove" data-id="{{choice.id}}">&times;</span>
+                    </div>
+                {% endfor %}
+                <div class="choice">
+                    <input type = "checkbox" id = "add-choice" disabled />
+                    <label for = "add-choice" class="add-option" id="add-option" data-question="{{question.id}}" data-type = "{{question.question_type}}">Add option</label>
                 </div>
             </div>
             {% endif %}

@@ -18,6 +18,7 @@ urlpatterns = [
     path('form/<str:code>/edit_choice', views.edit_choice, name="edit_choice"),
     path('form/<str:code>/add_choice', views.add_choice, name="add_choice"),
     path('form/<str:code>/remove_choice', views.remove_choice, name="remove_choice"),
+    path('form/<str:code>/get_choice/<str:question>', views.get_choice, name="get_choice"),
     path('403', views.FourZeroThree, name="403"),
     path('404', views.FourZeroFour, name="404")
 ]

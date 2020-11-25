@@ -312,6 +312,25 @@ def remove_choice(request, code):
         choice.delete()
         return JsonResponse({"message": "Success"})
 
+def get_choice(request, code, question):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect(reverse("login"))
+    formInfo = Form.objects.filter(code = code)
+    #Checking if form exists
+    if formInfo.count() == 0:
+        return HttpResponseRedirect(reverse('404'))
+    else: formInfo = formInfo[0]
+    #Checking if form creator is user
+    if formInfo.creator != request.user:
+        return HttpResponseRedirect(reverse("403"))
+    if request.method == "GET":
+        question = Questions.objects.filter(id = question)
+        if question.count() == 0: return HttpResponseRedirect(reverse('404'))
+        else: question = question[0]
+        choices = question.choices.all()
+        choices = [{"choice":i.choice, "is_answer":i.is_answer, "id": i.id} for i in choices]
+        return JsonResponse({"choices": choices, "question": question.question, "question_type": question.question_type, "question_id": question.id})
+
 # Error handler
 def FourZeroThree(request):
     return render(request, "error/403.html")
