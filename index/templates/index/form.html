@@ -25,7 +25,7 @@
     <div class="container">
         <span id="bg-color" style="display: none;">{{form.background_color}}</span>
         <span id="text-color" style="display: none;">{{form.text_color}}</span>
-        <div class="margin-top-bottom box question-box">
+        <div class="margin-top-bottom box question-box" id="form-head">
             <div class="form-title-box">
                 <input type="text" class="form-title edit-on-click input-form-title txt-clr" value="{{form.title}}">
             </div>
@@ -41,9 +41,9 @@
             {% endif %}
         </div>
         {% for question in form.questions.all %}
-        <div class="margin-top-bottom box question-box">
+        <div class="margin-top-bottom box question-box question" data-id="{{question.id}}">
             <input type="text" id="input-question" data-id="{{question.id}}" class="question-title edit-on-click" value="{{question.question}}">
-            <select class="question-type-select" id="input-question-type" data-id="{{question.id}}">
+            <select class="question-type-select" id="input-question-type" data-id="{{question.id}}" data-origin_type = "{{question.question_type}}">
                 <option value="short">Short answer</option>
                 <option value="paragraph">Paragraph</option>
                 <option value="multiple choice" {% if question.question_type == "multiple choice" %}selected{% endif %}>Multiple choice</option>
@@ -88,6 +88,10 @@
             </div>
         </div>
         {% endfor %}
+    </div>
+    <div class="question-options">
+        <img src = "/static/Icon/add.png" class="question-option-icon" title = "Add question" alt = "Add question icon" />
+        <img src = "/static/Icon/eye.png" class = "question-option-icon" title = "Preview" alt = "Preview icon" />
     </div>
     <div class="modal" id="customize-theme">
         <div class="modal-content">

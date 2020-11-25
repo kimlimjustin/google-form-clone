@@ -96,6 +96,19 @@ document.addEventListener("DOMContentLoaded", () => {
             })
         })
         document.querySelector("#setting").style.display = "none";
+        if(!document.querySelector("#collect_email").checked){
+            if(document.querySelector(".collect-email")) document.querySelector(".collect-email").parentNode.removeChild(document.querySelector(".collect-email"))
+        }else{
+            if(!document.querySelector(".collect-email")){
+                let collect_email = document.createElement("div");
+                collect_email.classList.add("collect-email")
+                collect_email.innerHTML = `<h3 class="question-title">Email address <span class="require-star">*</span></h3>
+                <input type="text" autoComplete="off" aria-label="Valid email address" disabled dir = "auto" class="require-email-edit"
+                placeholder = "Valid email address" />
+                <p class="collect-email-desc">This form is collecting email addresses. <span class="open-setting">Change settings</span></p>`
+                document.querySelector("#form-head").appendChild(collect_email)
+            }
+        }
     })
     document.querySelector("#delete-form").addEventListener("submit", e => {
         e.preventDefault();
@@ -134,11 +147,55 @@ document.addEventListener("DOMContentLoaded", () => {
                         required: document.querySelector("#required-checkbox").checked
                     })
                 })
-                document.querySelectorAll(".choices").forEach(choicesElement => {
-                    if(choicesElement.dataset.id === this.dataset.id){
-                        if(this.value !== "multiple choice" && this.value !== "checkbox"){
-                            choicesElement.parentNode.removeChild(choicesElement)
-                        }else{
+                console.log(this.dataset.origin_type)
+                if(this.dataset.origin_type === "multiple choice" || this.dataset.origin_type === "checkbox"){
+                    document.querySelectorAll(".choices").forEach(choicesElement => {
+                        if(choicesElement.dataset.id === this.dataset.id){
+                            if(this.value === "multiple choice" || this.value === "checkbox"){
+                                fetch(`get_choice/${this.dataset.id}`, {
+                                    method: "GET"
+                                })
+                                .then(response => response.json())
+                                .then(result => {
+                                    let ele = document.createElement("div");
+                                    ele.classList.add('choices');
+                                    ele.setAttribute("data-id", result["question_id"])
+                                    let choices = '';
+                                    if(this.value === "multiple choice"){
+                                        for(let i in result["choices"]){
+                                            if(i){ choices += `<div class="choice">
+                                            <input type="radio" id="${result["choices"][i].id}" disabled>
+                                            <label for="${result["choices"][i].id}">
+                                                <input type="text" data-id="${result["choices"][i].id}" class="edit-choice" value="${result["choices"][i].choice}">
+                                            </label>
+                                            <span class="remove-option" title="Remove" data-id="${result["choices"][i].id}">&times;</span></div>`}
+                                        }
+                                    }else if(this.value === "checkbox"){
+                                        for(let i in result["choices"]){
+                                            if(i){choices += `<div class="choice">
+                                            <input type="checkbox" id="${result["choices"][i].id}" disabled>
+                                            <label for="${result["choices"][i].id}">
+                                                <input type="text" data-id="${result["choices"][i].id}" class="edit-choice" value="${result["choices"][i].choice}">
+                                            </label>
+                                            <span class="remove-option" title="Remove" data-id="${result["choices"][i].id}">&times;</span></div>`}
+                                        }
+                                    }
+                                    ele.innerHTML = `<div class="choice">${choices}</div>
+                                    <div class="choice">
+                                        <input type = "radio" id = "add-choice" disabled />
+                                        <label for = "add-choice" class="add-option" id="add-option" data-question="${result["question_id"]}"
+                                        data-type = "${result["question"]}">Add option</label>
+                                    </div>`;
+                                    choicesElement.parentNode.replaceChild(ele, choicesElement);
+                                })
+                            }else{
+                                choicesElement.parentNode.removeChild(choicesElement)
+                            }
+                        }
+                    })
+                }else{
+                    document.querySelectorAll(".question-box").forEach(question => {
+                        if((this.value === "multiple choice" || this.value === "checkbox") && question.dataset.id === this.dataset.id){
                             fetch(`get_choice/${this.dataset.id}`, {
                                 method: "GET"
                             })
@@ -173,11 +230,12 @@ document.addEventListener("DOMContentLoaded", () => {
                                     <label for = "add-choice" class="add-option" id="add-option" data-question="${result["question_id"]}"
                                     data-type = "${result["question"]}">Add option</label>
                                 </div>`;
-                                choicesElement.parentNode.replaceChild(ele, choicesElement);
+                                question.insertBefore(ele, question.childNodes[4])
                             })
                         }
-                    }
-                })
+                    })
+                }
+                this.setAttribute("data-origin_type", this.value)
             })
         })
     }
