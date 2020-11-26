@@ -62,7 +62,7 @@
                 {% endfor %}
                 <div class="choice">
                     <input type = "radio" id = "add-choice" disabled />
-                    <label for = "add-choice" class="add-option" id="add-option" data-question="{{question.id}}" data-type = "{{question.question_type}}">Add option</label>
+                    <label for = "add-choice" class="add-option" data-question="{{question.id}}" data-type = "{{question.question_type}}">Add option</label>
                 </div>
             </div>
             {% elif question.question_type == "checkbox" %}
@@ -91,8 +91,8 @@
             </div>
             {% endif %}
             <div class="choice-option">
-                <input type="checkbox" class="required-checkbox" data-id="{{question.id}}" {% if question.required %}checked{% endif %}>
-                <label for="required-checkbox" class="required">Required</label>
+                <input type="checkbox" class="required-checkbox" id="{{question.id}}" data-id="{{question.id}}" {% if question.required %}checked{% endif %}>
+                <label for="{{question.id}}" class="required">Required</label>
             </div>
         </div>
         {% endfor %}

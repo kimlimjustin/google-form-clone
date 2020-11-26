@@ -146,7 +146,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     editQuestion();
     const changeType = () => {
-        document.querySelectorAll("#input-question-type").forEach(ele => {
+        document.querySelectorAll(".input-question-type").forEach(ele => {
             ele.addEventListener('input', function(){
                 let required;
                 let question;
@@ -292,28 +292,30 @@ document.addEventListener("DOMContentLoaded", () => {
         })
     }
     changeType()
-    document.querySelectorAll(".required-checkbox").forEach(checkbox => {
-        checkbox.addEventListener('input', function(){
-            let question;
-            let question_type;
-            document.querySelectorAll(".input-question-type").forEach(qp => {
-                if(qp.dataset.id === this.dataset.id) question_type = qp.value
-            })
-            document.querySelectorAll('.input-question').forEach(q => {
-                if(q.dataset.id === this.dataset.id) question = q.value
-            })
-            fetch('edit_question', {
-                method: "POST",
-                headers: {'X-CSRFToken': csrf},
-                body: JSON.stringify({
-                    id: this.dataset.id,
-                    question: document.querySelector("#input-question").value,
-                    question_type: document.querySelector("#input-question-type").value,
-                    required: this.checked
+    const editRequire = () => {
+        document.querySelectorAll(".required-checkbox").forEach(checkbox => {
+            checkbox.addEventListener('input', function(){
+                let question;
+                let question_type;
+                document.querySelectorAll(".input-question-type").forEach(qp => {
+                    if(qp.dataset.id === this.dataset.id) question_type = qp.value
+                })
+                document.querySelectorAll('.input-question').forEach(q => {
+                    if(q.dataset.id === this.dataset.id) question = q.value
+                })
+                fetch('edit_question', {
+                    method: "POST",
+                    headers: {'X-CSRFToken': csrf},
+                    body: JSON.stringify({
+                        id: this.dataset.id,
+                        question: question,
+                        question_type: question_type,
+                        required: this.checked
+                    })
                 })
             })
         })
-    })
+    }
     const editChoice = () => {
         document.querySelectorAll(".edit-choice").forEach(choice => {
             choice.addEventListener("input", function(){
@@ -346,42 +348,45 @@ document.addEventListener("DOMContentLoaded", () => {
         })
     }
     removeOption()
-    document.querySelectorAll("#add-option").forEach(question =>{
-        question.addEventListener("click", function(){
-            fetch('add_choice', {
-                method: "POST",
-                headers: {'X-CSRFToken': csrf},
-                body: JSON.stringify({
-                    "question": this.dataset.question
+    const addOption = () => {
+        document.querySelectorAll(".add-option").forEach(question =>{
+            question.addEventListener("click", function(){
+                fetch('add_choice', {
+                    method: "POST",
+                    headers: {'X-CSRFToken': csrf},
+                    body: JSON.stringify({
+                        "question": this.dataset.question
+                    })
+                })
+                .then(response => response.json())
+                .then(result => {
+                    let element = document.createElement("div");
+                    element.classList.add('choice');
+                    if(this.dataset.type === "multiple choice"){
+                        element.innerHTML = `<input type="radio" id="${result["id"]}" disabled>
+                        <label for="${result["id"]}">
+                            <input type="text" value="${result["choice"]}" class="edit-choice" data-id="${result["id"]}">
+                        </label>
+                        <span class="remove-option" title = "Remove" data-id="${result["id"]}">&times;</span>`;
+                    }else if(this.dataset.type === "checkbox"){
+                        element.innerHTML = `<input type="checkbox" id="${result["id"]}" disabled>
+                        <label for="${result["id"]}">
+                            <input type="text" value="${result["choice"]}" class="edit-choice" data-id="${result["id"]}">
+                        </label>
+                        <span class="remove-option" title = "Remove" data-id="${result["id"]}">&times;</span>`;
+                    }
+                    document.querySelectorAll(".choices").forEach(choices => {
+                        if(choices.dataset.id === this.dataset.question){
+                            choices.insertBefore(element, choices.childNodes[choices.childNodes.length -2]);
+                            editChoice()
+                            removeOption()
+                        }
+                    });
                 })
             })
-            .then(response => response.json())
-            .then(result => {
-                let element = document.createElement("div");
-                element.classList.add('choice');
-                if(this.dataset.type === "multiple choice"){
-                    element.innerHTML = `<input type="radio" id="${result["id"]}" disabled>
-                    <label for="${result["id"]}">
-                        <input type="text" value="${result["choice"]}" class="edit-choice" data-id="${result["id"]}">
-                    </label>
-                    <span class="remove-option" title = "Remove" data-id="${result["id"]}">&times;</span>`;
-                }else if(this.dataset.type === "checkbox"){
-                    element.innerHTML = `<input type="checkbox" id="${result["id"]}" disabled>
-                    <label for="${result["id"]}">
-                        <input type="text" value="${result["choice"]}" class="edit-choice" data-id="${result["id"]}">
-                    </label>
-                    <span class="remove-option" title = "Remove" data-id="${result["id"]}">&times;</span>`;
-                }
-                document.querySelectorAll(".choices").forEach(choices => {
-                    if(choices.dataset.id === this.dataset.question){
-                        choices.insertBefore(element, choices.childNodes[choices.childNodes.length -2]);
-                        editChoice()
-                        removeOption()
-                    }
-                });
-            })
         })
-    })
+    }
+    addOption()
     document.querySelector("#add-question").addEventListener("click", () => {
         fetch('add_question', {
             method: "POST",
@@ -397,11 +402,11 @@ document.addEventListener("DOMContentLoaded", () => {
             ele.classList.add('question');
             ele.setAttribute("data-id", result["question"].id)
             ele.innerHTML = `
-            <input type="text" id="input-question" data-id="${result["question"].id}" class="question-title edit-on-click" value="${result["question"].question}">
-            <select class="question-type-select" id="input-question-type" data-id="${result["question"].id}" data-origin_type = "${result["question"].question_type}">
+            <input type="text" data-id="${result["question"].id}" class="question-title edit-on-click input-question" value="${result["question"].question}">
+            <select class="question-type-select input-question-type" data-id="${result["question"].id}" data-origin_type = "${result["question"].question_type}">
                 <option value="short">Short answer</option>
                 <option value="paragraph">Paragraph</option>
-                <option value="multiple choice">Multiple choice</option>
+                <option value="multiple choice" selected>Multiple choice</option>
                 <option value="checkbox">Checkbox</option>
             </select>
             <div class="choices" data-id="${result["question"].id}">
@@ -419,8 +424,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 </div>
             </div>
             <div class="choice-option">
-                <input type="checkbox" id="required-checkbox" data-id="${result["question"].id}">
-                <label for="required-checkbox" class="required">Required</label>
+                <input type="checkbox" class="required-checkbox" id="${result["question"].id}" data-id="${result["question"].id}">
+                <label for="${result["question"].id}" class="required">Required</label>
             </div>
             `;
             document.querySelector(".container").appendChild(ele);
@@ -428,6 +433,8 @@ document.addEventListener("DOMContentLoaded", () => {
             removeOption()
             changeType()
             editQuestion()
+            editRequire()
+            addOption()
         })
     })
 })
