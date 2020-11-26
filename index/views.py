@@ -354,6 +354,26 @@ def add_question(request, code):
         return JsonResponse({'question': {'question': "Untitled Question", "question_type": "multiple choice", "required": False, "id": question.id}, 
         "choices": {"choice": "Option 1", "is_answer": False, 'id': choices.id}})
 
+def delete_question(request, code, question):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect(reverse("login"))
+    formInfo = Form.objects.filter(code = code)
+    #Checking if form exists
+    if formInfo.count() == 0:
+        return HttpResponseRedirect(reverse('404'))
+    else: formInfo = formInfo[0]
+    #Checking if form creator is user
+    if formInfo.creator != request.user:
+        return HttpResponseRedirect(reverse("403"))
+    if request.method == "DELETE":
+        question = Questions.objects.filter(id = question)
+        if question.count() == 0: return HttpResponseRedirect(reverse("404"))
+        else: question = question[0]
+        for i in question.choices.all():
+            i.delete()
+            question.delete()
+        return JsonResponse({"message": "Success"})
+
 # Error handler
 def FourZeroThree(request):
     return render(request, "error/403.html")

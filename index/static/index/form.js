@@ -388,6 +388,24 @@ document.addEventListener("DOMContentLoaded", () => {
         })
     }
     addOption()
+    const deleteQuestion = () => {
+        document.querySelectorAll(".delete-question").forEach(question => {
+            question.addEventListener("click", function(){
+                fetch(`delete_question/${this.dataset.id}`, {
+                    method: "DELETE",
+                    headers: {'X-CSRFToken': csrf},
+                })
+                .then(() => {
+                    document.querySelectorAll(".question").forEach(q =>{
+                        if(q.dataset.id === this.dataset.id){
+                            q.parentNode.removeChild(q)
+                        }
+                    })
+                })
+            })
+        })
+    }
+    deleteQuestion()
     document.querySelector("#add-question").addEventListener("click", () => {
         fetch('add_question', {
             method: "POST",
@@ -427,6 +445,10 @@ document.addEventListener("DOMContentLoaded", () => {
             <div class="choice-option">
                 <input type="checkbox" class="required-checkbox" id="${result["question"].id}" data-id="${result["question"].id}">
                 <label for="${result["question"].id}" class="required">Required</label>
+                <div class="float-right">
+                    <img src="/static/Icon/dustbin.png" alt="Delete question icon" class="question-option-icon delete-question" title="Delete question"
+                    data-id="${result["question"].id}">
+                </div>
             </div>
             `;
             document.querySelector(".container").appendChild(ele);
@@ -436,6 +458,7 @@ document.addEventListener("DOMContentLoaded", () => {
             editQuestion()
             editRequire()
             addOption()
+            deleteQuestion()
         })
     })
 })

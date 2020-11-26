@@ -11,14 +11,14 @@
 <div class = "container-fluid">
     <div class="form-topnav">
         <a href = "/">
-            <img src = "/static/Icon/icon.png" alt = "Google Forms Icon(CLONE)" class="navbar-icon form-icon" title = "Forms" />
+            <img src = "{% static 'Icon/icon.png' %}" alt = "Google Forms Icon(CLONE)" class="navbar-icon form-icon" title = "Forms" />
         </a>
         <input class="nav-text nav-form-title edit-on-click input-form-title" value  = "{{form.title}}" type="text">
         <div class="float-right">
-            <img src="/static/Icon/theme.png" alt="Theme icon" id="customize-theme-btn" title = "Customize theme" class="nav-form-menu-icon" />
-            <img src="/static/Icon/eye.png" alt="Preview icon" title = "Preview" class="nav-form-menu-icon big-screen" />
-            <img src="/static/Icon/send.png" alt ="Send icon" title = "Send" class="nav-form-menu-icon small-screen" />
-            <img src="/static/Icon/setting.png" alt="Setting icon" title = "Setting" class="nav-form-menu-icon open-setting" />
+            <img src="{% static 'Icon/theme.png' %}" alt="Theme icon" id="customize-theme-btn" title = "Customize theme" class="nav-form-menu-icon" />
+            <img src="{% static 'Icon/eye.png' %}" alt="Preview icon" title = "Preview" class="nav-form-menu-icon big-screen" />
+            <img src="{% static 'Icon/send.png' %}" alt ="Send icon" title = "Send" class="nav-form-menu-icon small-screen" />
+            <img src="{% static 'Icon/setting.png' %}" alt="Setting icon" title = "Setting" class="nav-form-menu-icon open-setting" />
             <button class = "btn send-form-btn big-screen">Send</button>
         </div>
     </div>
@@ -93,13 +93,17 @@
             <div class="choice-option">
                 <input type="checkbox" class="required-checkbox" id="{{question.id}}" data-id="{{question.id}}" {% if question.required %}checked{% endif %}>
                 <label for="{{question.id}}" class="required">Required</label>
+                <div class="float-right">
+                    <img src="{% static 'Icon/dustbin.png' %}" alt="Delete question icon" class="question-option-icon delete-question" title="Delete question"
+                    data-id="{{question.id}}">
+                </div>
             </div>
         </div>
         {% endfor %}
     </div>
     <div class="question-options">
-        <img src = "/static/Icon/add.png" class="question-option-icon" title = "Add question" alt = "Add question icon" id="add-question" />
-        <img src = "/static/Icon/eye.png" class = "question-option-icon" title = "Preview" alt = "Preview icon" />
+        <img src = "{% static 'Icon/add.png' %}" class="form-option-icon" title = "Add question" alt = "Add question icon" id="add-question" />
+        <img src = "{% static 'Icon/eye.png' %}" class = "form-option-icon" title = "Preview" alt = "Preview icon" />
     </div>
     <div class="modal" id="customize-theme">
         <div class="modal-content">

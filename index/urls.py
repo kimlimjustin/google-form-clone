@@ -20,6 +20,7 @@ urlpatterns = [
     path('form/<str:code>/remove_choice', views.remove_choice, name="remove_choice"),
     path('form/<str:code>/get_choice/<str:question>', views.get_choice, name="get_choice"),
     path('form/<str:code>/add_question', views.add_question, name="add_question"),
+    path('form/<str:code>/delete_question/<str:question>', views.delete_question, name="delete_question"),
     path('403', views.FourZeroThree, name="403"),
     path('404', views.FourZeroFour, name="404")
 ]

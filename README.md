@@ -22,5 +22,5 @@
 Distributed under the [MIT](https://github.com/kimlimjustin/google-form-clone/blob/master/LICENSE) License. See [`LICENSE`](https://github.com/kimlimjustin/google-form-clone/blob/master/LICENSE) for more information.
 
 ## Contact
-Justin Maximillian Kimlim - [kimlimjustin@gmail.com](mailto:kimlimjustin@gmail.com)
-Project link: https://github.com/kimlimjustin/google-form-clone
+- Justin Maximillian Kimlim - [kimlimjustin@gmail.com](mailto:kimlimjustin@gmail.com)
+- Project link: https://github.com/kimlimjustin/google-form-clone
