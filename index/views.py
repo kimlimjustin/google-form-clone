@@ -331,6 +331,29 @@ def get_choice(request, code, question):
         choices = [{"choice":i.choice, "is_answer":i.is_answer, "id": i.id} for i in choices]
         return JsonResponse({"choices": choices, "question": question.question, "question_type": question.question_type, "question_id": question.id})
 
+def add_question(request, code):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect(reverse("login"))
+    formInfo = Form.objects.filter(code = code)
+    #Checking if form exists
+    if formInfo.count() == 0:
+        return HttpResponseRedirect(reverse('404'))
+    else: formInfo = formInfo[0]
+    #Checking if form creator is user
+    if formInfo.creator != request.user:
+        return HttpResponseRedirect(reverse("403"))
+    if request.method == "POST":
+        choices = Choices(choice = "Option 1")
+        choices.save()
+        question = Questions(question_type = "multiple choice", question= "Untitled Question", required= False)
+        question.save()
+        question.choices.add(choices)
+        question.save()
+        formInfo.questions.add(question)
+        formInfo.save()
+        return JsonResponse({'question': {'question': "Untitled Question", "question_type": "multiple choice", "required": False, "id": question.id}, 
+        "choices": {"choice": "Option 1", "is_answer": False, 'id': choices.id}})
+
 # Error handler
 def FourZeroThree(request):
     return render(request, "error/403.html")

@@ -120,31 +120,50 @@ document.addEventListener("DOMContentLoaded", () => {
             .then(() => window.location = "/")
         }
     })
-    document.querySelectorAll("#input-question").forEach(question => {
-        question.addEventListener('input', function(){
-            fetch('edit_question', {
-                method: "POST",
-                headers: {'X-CSRFToken': csrf},
-                body: JSON.stringify({
-                    id: this.dataset.id,
-                    question: this.value,
-                    question_type: document.querySelector("#input-question-type").value,
-                    required: document.querySelector("#required-checkbox").checked
+    const editQuestion = () => {
+        document.querySelectorAll(".input-question").forEach(question => {
+            question.addEventListener('input', function(){
+                let question_type;
+                let required;
+                document.querySelectorAll(".input-question-type").forEach(qp => {
+                    if(qp.dataset.id === this.dataset.id) question_type = qp.value
                 })
-            })
-        })
-    })
-    const changeType = () => {
-        document.querySelectorAll("#input-question-type").forEach(ele => {
-            ele.addEventListener('input', function(){
+                document.querySelectorAll('.required-checkbox').forEach(rc => {
+                    if(rc.dataset.id === this.dataset.id) required = rc.checked;
+                })
                 fetch('edit_question', {
                     method: "POST",
                     headers: {'X-CSRFToken': csrf},
                     body: JSON.stringify({
                         id: this.dataset.id,
-                        question: document.querySelector("#input-question").value,
+                        question: this.value,
+                        question_type: question_type,
+                        required: required
+                    })
+                })
+            })
+        })
+    }
+    editQuestion();
+    const changeType = () => {
+        document.querySelectorAll("#input-question-type").forEach(ele => {
+            ele.addEventListener('input', function(){
+                let required;
+                let question;
+                document.querySelectorAll('.required-checkbox').forEach(rc => {
+                    if(rc.dataset.id === this.dataset.id) required = rc.checked;
+                })
+                document.querySelectorAll('.input-question').forEach(q => {
+                    if(q.dataset.id === this.dataset.id) question = q.value
+                })
+                fetch('edit_question', {
+                    method: "POST",
+                    headers: {'X-CSRFToken': csrf},
+                    body: JSON.stringify({
+                        id: this.dataset.id,
+                        question: question,
                         question_type: this.value,
-                        required: document.querySelector("#required-checkbox").checked
+                        required: required
                     })
                 })
                 
@@ -273,15 +292,25 @@ document.addEventListener("DOMContentLoaded", () => {
         })
     }
     changeType()
-    document.querySelector("#required-checkbox").addEventListener('input', function(){
-        fetch('edit_question', {
-            method: "POST",
-            headers: {'X-CSRFToken': csrf},
-            body: JSON.stringify({
-                id: this.dataset.id,
-                question: document.querySelector("#input-question").value,
-                question_type: document.querySelector("#input-question-type").value,
-                required: this.checked
+    document.querySelectorAll(".required-checkbox").forEach(checkbox => {
+        checkbox.addEventListener('input', function(){
+            let question;
+            let question_type;
+            document.querySelectorAll(".input-question-type").forEach(qp => {
+                if(qp.dataset.id === this.dataset.id) question_type = qp.value
+            })
+            document.querySelectorAll('.input-question').forEach(q => {
+                if(q.dataset.id === this.dataset.id) question = q.value
+            })
+            fetch('edit_question', {
+                method: "POST",
+                headers: {'X-CSRFToken': csrf},
+                body: JSON.stringify({
+                    id: this.dataset.id,
+                    question: document.querySelector("#input-question").value,
+                    question_type: document.querySelector("#input-question-type").value,
+                    required: this.checked
+                })
             })
         })
     })
@@ -343,11 +372,62 @@ document.addEventListener("DOMContentLoaded", () => {
                     </label>
                     <span class="remove-option" title = "Remove" data-id="${result["id"]}">&times;</span>`;
                 }
-                let choices = document.querySelector(".choices");
-                choices.insertBefore(element, choices.childNodes[choices.childNodes.length -2]);
-                editChoice()
-                removeOption()
+                document.querySelectorAll(".choices").forEach(choices => {
+                    if(choices.dataset.id === this.dataset.question){
+                        choices.insertBefore(element, choices.childNodes[choices.childNodes.length -2]);
+                        editChoice()
+                        removeOption()
+                    }
+                });
             })
+        })
+    })
+    document.querySelector("#add-question").addEventListener("click", () => {
+        fetch('add_question', {
+            method: "POST",
+            headers: {'X-CSRFToken': csrf},
+            body: JSON.stringify({})
+        })
+        .then(response => response.json())
+        .then(result => {
+            let ele = document.createElement('div')
+            ele.classList.add('margin-top-bottom');
+            ele.classList.add('box');
+            ele.classList.add('question-box');
+            ele.classList.add('question');
+            ele.setAttribute("data-id", result["question"].id)
+            ele.innerHTML = `
+            <input type="text" id="input-question" data-id="${result["question"].id}" class="question-title edit-on-click" value="${result["question"].question}">
+            <select class="question-type-select" id="input-question-type" data-id="${result["question"].id}" data-origin_type = "${result["question"].question_type}">
+                <option value="short">Short answer</option>
+                <option value="paragraph">Paragraph</option>
+                <option value="multiple choice">Multiple choice</option>
+                <option value="checkbox">Checkbox</option>
+            </select>
+            <div class="choices" data-id="${result["question"].id}">
+                <div class="choice">
+                    <input type="radio" id="${result["choices"].id}" disabled>
+                    <label for="${result["choices"].id}">
+                        <input type="text" value="${result["choices"].choice}" class="edit-choice" data-id="${result["choices"].id}">
+                    </label>
+                    <span class="remove-option" title = "Remove" data-id="${result["choices"].id}">&times;</span>
+                </div>
+                <div class="choice">
+                    <input type = "radio" id = "add-choice" disabled />
+                    <label for = "add-choice" class="add-option" id="add-option" data-question="${result["question"].id}" 
+                    data-type = "${result["question"].question_type}">Add option</label>
+                </div>
+            </div>
+            <div class="choice-option">
+                <input type="checkbox" id="required-checkbox" data-id="${result["question"].id}">
+                <label for="required-checkbox" class="required">Required</label>
+            </div>
+            `;
+            document.querySelector(".container").appendChild(ele);
+            editChoice()
+            removeOption()
+            changeType()
+            editQuestion()
         })
     })
 })
