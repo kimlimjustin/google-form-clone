@@ -316,6 +316,7 @@ document.addEventListener("DOMContentLoaded", () => {
             })
         })
     }
+    editRequire()
     const editChoice = () => {
         document.querySelectorAll(".edit-choice").forEach(choice => {
             choice.addEventListener("input", function(){
