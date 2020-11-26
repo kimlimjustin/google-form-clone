@@ -147,7 +147,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         required: document.querySelector("#required-checkbox").checked
                     })
                 })
-                console.log(this.dataset.origin_type)
+                
                 if(this.dataset.origin_type === "multiple choice" || this.dataset.origin_type === "checkbox"){
                     document.querySelectorAll(".choices").forEach(choicesElement => {
                         if(choicesElement.dataset.id === this.dataset.id){
@@ -189,12 +189,31 @@ document.addEventListener("DOMContentLoaded", () => {
                                     choicesElement.parentNode.replaceChild(ele, choicesElement);
                                 })
                             }else{
-                                choicesElement.parentNode.removeChild(choicesElement)
+                                if(this.value === "short"){
+                                    choicesElement.parentNode.removeChild(choicesElement)
+                                    let ele = document.createElement("div");
+                                    ele.innerHTML = `<div class="answers" data-id="${this.dataset.id}">
+                                    <input type ="text" class="short-answer" disabled placeholder="Short answer text" />
+                                </div>`
+                                    this.parentNode.insertBefore(ele, this.parentNode.childNodes[4])
+                                }else if(this.value === "paragraph"){
+                                    choicesElement.parentNode.removeChild(choicesElement)
+                                    let ele = document.createElement("div");
+                                    ele.innerHTML = `<div class="answers" data-id="${this.dataset.id}">
+                                    <textarea class="long-answer" disabled placeholder="Long answer text" ></textarea>
+                                </div>`
+                                    this.parentNode.insertBefore(ele, this.parentNode.childNodes[4])
+                                }
                             }
                         }
                     })
                 }else{
                     document.querySelectorAll(".question-box").forEach(question => {
+                        document.querySelectorAll(".answers").forEach(answer => {
+                            if(answer.dataset.id === this.dataset.id){
+                                answer.parentNode.removeChild(answer)
+                            }
+                        })
                         if((this.value === "multiple choice" || this.value === "checkbox") && question.dataset.id === this.dataset.id){
                             fetch(`get_choice/${this.dataset.id}`, {
                                 method: "GET"
@@ -232,6 +251,20 @@ document.addEventListener("DOMContentLoaded", () => {
                                 </div>`;
                                 question.insertBefore(ele, question.childNodes[4])
                             })
+                        }else{
+                            if(this.value === "short"){
+                                let ele = document.createElement("div");
+                                ele.innerHTML = `<div class="answers" data-id="${this.dataset.id}">
+                                <input type ="text" class="short-answer" disabled placeholder="Short answer text" />
+                            </div>`
+                                this.parentNode.insertBefore(ele, this.parentNode.childNodes[4])
+                            }else if(this.value === "paragraph"){
+                                let ele = document.createElement("div");
+                                ele.innerHTML = `<div class="answers" data-id="${this.dataset.id}">
+                                <textarea class="long-answer" disabled placeholder="Long answer text" ></textarea>
+                            </div>`
+                                this.parentNode.insertBefore(ele, this.parentNode.childNodes[4])
+                            }
                         }
                     })
                 }

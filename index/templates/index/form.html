@@ -44,8 +44,8 @@
         <div class="margin-top-bottom box question-box question" data-id="{{question.id}}">
             <input type="text" id="input-question" data-id="{{question.id}}" class="question-title edit-on-click" value="{{question.question}}">
             <select class="question-type-select" id="input-question-type" data-id="{{question.id}}" data-origin_type = "{{question.question_type}}">
-                <option value="short">Short answer</option>
-                <option value="paragraph">Paragraph</option>
+                <option value="short" {% if question.question_type == "short" %}selected{% endif %}>Short answer</option>
+                <option value="paragraph" {% if question.question_type == "paragraph" %}selected{% endif %}>Paragraph</option>
                 <option value="multiple choice" {% if question.question_type == "multiple choice" %}selected{% endif %}>Multiple choice</option>
                 <option value="checkbox" {% if question.question_type == "checkbox" %}selected{% endif %}>Checkbox</option>
             </select>
@@ -80,6 +80,14 @@
                     <input type = "checkbox" id = "add-choice" disabled />
                     <label for = "add-choice" class="add-option" id="add-option" data-question="{{question.id}}" data-type = "{{question.question_type}}">Add option</label>
                 </div>
+            </div>
+            {% elif question.question_type == "short" %}
+            <div class="answers" data-id="{{question.id}}">
+                <input type ="text" class="short-answer" disabled placeholder="Short answer text" />
+            </div>
+            {% elif question.question_type == "paragraph" %}
+            <div class="answers" data-id="{{question.id}}">
+                <textarea class="long-answer" disabled placeholder="Long answer text" ></textarea>
             </div>
             {% endif %}
             <div class="choice-option">

@@ -476,6 +476,25 @@ body{
     font-family: "Roboto Condensed";
 }
 
+.answers{
+    margin: 5px;
+    font-family: "Google Sans";
+}
+
+.short-answer{
+    width: 50%;
+    border: none;
+    padding: 5px;
+    border-bottom: 1px solid #70757a;
+}
+
+.long-answer{
+    width: -webkit-fill-available;
+    border: none;
+    padding: 5px;
+    border-bottom: 1px solid #70757a;
+}
+
 @media only screen and (max-width: 768px){
     .nav-form-title{
         width: 100px;
