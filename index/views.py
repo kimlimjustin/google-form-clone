@@ -374,6 +374,24 @@ def delete_question(request, code, question):
             question.delete()
         return JsonResponse({"message": "Success"})
 
+def score(request, code):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect(reverse("login"))
+    formInfo = Form.objects.filter(code = code)
+    #Checking if form exists
+    if formInfo.count() == 0:
+        return HttpResponseRedirect(reverse('404'))
+    else: formInfo = formInfo[0]
+    #Checking if form creator is user
+    if formInfo.creator != request.user:
+        return HttpResponseRedirect(reverse("403"))
+    if not formInfo.is_quiz:
+        return HttpResponseRedirect(reverse("404"))
+    else:
+        return render(request, "index/score.html", {
+            "form": formInfo
+        })
+
 # Error handler
 def FourZeroThree(request):
     return render(request, "error/403.html")

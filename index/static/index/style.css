@@ -395,6 +395,7 @@ body{
 .question-title{
     font-family: "Google Sans";
     font-size: 1.3rem;
+    font-weight: normal;
 }
 
 .require-star{

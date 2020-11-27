@@ -1,14 +1,11 @@
 {% extends 'index/layout.html' %}
-{% block title %}
-{{form.title}} ~ Google Forms CLONE
-{% endblock %}
 {% load static %}
 {% block script %}
-<script src="{% static 'index/form.js' %}"></script>
+<script src="{% static 'index/score.js' %}" defer></script>
 <script src="{% static 'lib/cookie.min.js' %}"></script>
 {% endblock %}
 {% block body %}
-<div class = "container-fluid">
+<div class="container-fluid">
     <div class="form-topnav">
         <a href = "/">
             <img src = "{% static 'Icon/icon.png' %}" alt = "Google Forms Icon(CLONE)" class="navbar-icon form-icon" title = "Forms" />
@@ -24,9 +21,9 @@
     </div>
     <div class="form-topnav">
         <div class="form-navigation center">
-            <span class="col-4 navigation active">Questions</span>
-            <span class="col-4 navigation"><a href = "{% url 'score' form.code %}" class="link">Scores</a></span>
-            <span class="col-4 navigation"><a href = "" class="link">Responses</a></span>
+            <span class="col-4 navigation"><a href = "{% url 'edit_form' form.code %}" class="link">Questions</a></span>
+            <span class="col-4 navigation active">Scores</span>
+            <span class="col-4 navigation">Responses</span>
         </div>
     </div>
     <div class="container">
@@ -49,73 +46,15 @@
         </div>
         {% for question in form.questions.all %}
         <div class="margin-top-bottom box question-box question" data-id="{{question.id}}">
-            <input type="text" data-id="{{question.id}}" class="question-title edit-on-click input-question" value="{{question.question}}">
-            <select class="question-type-select input-question-type" data-id="{{question.id}}" data-origin_type = "{{question.question_type}}">
-                <option value="short" {% if question.question_type == "short" %}selected{% endif %}>Short answer</option>
-                <option value="paragraph" {% if question.question_type == "paragraph" %}selected{% endif %}>Paragraph</option>
-                <option value="multiple choice" {% if question.question_type == "multiple choice" %}selected{% endif %}>Multiple choice</option>
-                <option value="checkbox" {% if question.question_type == "checkbox" %}selected{% endif %}>Checkbox</option>
-            </select>
-            {% if question.question_type == "multiple choice" %}
-            <div class="choices" data-id="{{question.id}}">
-                {% for choice in question.choices.all %}
-                    <div class="choice">
-                        <input type="radio" id="{{choice.id}}" disabled>
-                        <label for="{{choice.id}}">
-                            <input type="text" value="{{choice.choice}}" class="edit-choice" data-id="{{choice.id}}">
-                        </label>
-                        <span class="remove-option" title = "Remove" data-id="{{choice.id}}">&times;</span>
-                    </div>
-                {% endfor %}
-                <div class="choice">
-                    <input type = "radio" id = "add-choice" disabled />
-                    <label for = "add-choice" class="add-option" data-question="{{question.id}}" data-type = "{{question.question_type}}">Add option</label>
-                </div>
-            </div>
-            {% elif question.question_type == "checkbox" %}
-            <div class="choices" data-id="{{question.id}}">
-                {% for choice in question.choices.all %}
-                    <div class="choice">
-                        <input type="checkbox" id="{{choice.id}}" disabled>
-                        <label for="{{choice.id}}">
-                            <input type="text" data-id="{{choice.id}}" class="edit-choice" value="{{choice.choice}}">
-                        </label>
-                        <span class="remove-option" title="Remove" data-id="{{choice.id}}">&times;</span>
-                    </div>
-                {% endfor %}
-                <div class="choice">
-                    <input type = "checkbox" id = "add-choice" disabled />
-                    <label for = "add-choice" class="add-option" id="add-option" data-question="{{question.id}}" data-type = "{{question.question_type}}">Add option</label>
-                </div>
-            </div>
-            {% elif question.question_type == "short" %}
-            <div class="answers" data-id="{{question.id}}">
-                <input type ="text" class="short-answer" disabled placeholder="Short answer text" />
-            </div>
-            {% elif question.question_type == "paragraph" %}
-            <div class="answers" data-id="{{question.id}}">
-                <textarea class="long-answer" disabled placeholder="Long answer text" ></textarea>
-            </div>
-            {% endif %}
-            <div class="choice-option">
-                <input type="checkbox" class="required-checkbox" id="{{question.id}}" data-id="{{question.id}}" {% if question.required %}checked{% endif %}>
-                <label for="{{question.id}}" class="required">Required</label>
-                <div class="float-right">
-                    <img src="{% static 'Icon/dustbin.png' %}" alt="Delete question icon" class="question-option-icon delete-question" title="Delete question"
-                    data-id="{{question.id}}">
-                </div>
-            </div>
+            <h1 class="question-title">{{question.question}}</h1>
         </div>
         {% endfor %}
     </div>
     <div class="question-options">
-        <img src = "{% static 'Icon/add.png' %}" class="form-option-icon" title = "Add question" alt = "Add question icon" id="add-question" />
         <img src = "{% static 'Icon/eye.png' %}" class = "form-option-icon" title = "Preview" alt = "Preview icon" />
-        {% if form.is_quiz %}
-        <a href = "{% url 'score' form.code %}" id="add-score">
-            <img src = "{% static 'Icon/score.png' %}" class = "form-option-icon" title = "Add score" alt = "Score icon" />
+        <a href="{% url 'edit_form' form.code %}">
+            <img src = "{% static 'Icon/question.png' %}" class = "form-option-icon" title = "Questions" alt = "Question icon" />
         </a>
-        {% endif %}
     </div>
     <div class="modal" id="customize-theme">
         <div class="modal-content">
