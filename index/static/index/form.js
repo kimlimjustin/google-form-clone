@@ -109,6 +109,19 @@ document.addEventListener("DOMContentLoaded", () => {
                 document.querySelector("#form-head").appendChild(collect_email)
             }
         }
+        if(document.querySelector("#is_quiz").checked){
+            if(!document.querySelector("#add-score")){
+                let is_quiz = document.createElement('a')
+                is_quiz.setAttribute("href", "/");
+                is_quiz.setAttribute("id", "add-score");
+                is_quiz.innerHTML = `<img src = "/static/Icon/score.png" id="add-score" class = "form-option-icon" title = "Add score" alt = "Score icon" />`;
+                document.querySelector(".question-options").appendChild(is_quiz)
+            }
+        }else{
+            if(document.querySelector("#add-score")){
+                document.querySelector("#add-score").parentNode.removeChild(document.querySelector("#add-score"))
+            }
+        }
     })
     document.querySelector("#delete-form").addEventListener("submit", e => {
         e.preventDefault();

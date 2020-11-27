@@ -376,7 +376,7 @@ body{
     background-color: #fff;
     margin: 20px 0;
     position: fixed;
-    top: 80%;
+    bottom: 10%;
     right: 0;
     border: 1px solid #84878b;
 }
@@ -414,7 +414,7 @@ body{
     margin: 10px 0;
 }
 
-#open-setting{
+.open-setting{
     color: #1a73e8;
     cursor: pointer;
 }
@@ -499,6 +499,23 @@ body{
     width: 1.5rem;
     cursor: pointer;
 }
+.form-navigation{
+    background-color: #fff;
+    width: 400px;
+    margin: auto;
+}
+
+.navigation{
+    text-align: center;
+    cursor: pointer;
+}
+
+.form-navigation .active{
+    color:rgb(0, 132, 223);
+    font-weight: bold;
+    font-family: "Google Sans";
+    font-size: 0.8rem;
+}
 @media only screen and (max-width: 768px){
     .nav-form-title{
         width: 100px;
@@ -528,6 +545,9 @@ body{
 
     .big-screen{
         display: none;
+    }
+    .navigation{
+        width: calc((100% - 60px)/3) !important;
     }
 }
 

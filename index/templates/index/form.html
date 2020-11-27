@@ -22,6 +22,13 @@
             <button class = "btn send-form-btn big-screen">Send</button>
         </div>
     </div>
+    <div class="form-topnav">
+        <div class="form-navigation center">
+            <span class="col-4 navigation active">Questions</span>
+            <span class="col-4 navigation">Scores</span>
+            <span class="col-4 navigation">Responses</span>
+        </div>
+    </div>
     <div class="container">
         <span id="bg-color" style="display: none;">{{form.background_color}}</span>
         <span id="text-color" style="display: none;">{{form.text_color}}</span>
@@ -104,6 +111,11 @@
     <div class="question-options">
         <img src = "{% static 'Icon/add.png' %}" class="form-option-icon" title = "Add question" alt = "Add question icon" id="add-question" />
         <img src = "{% static 'Icon/eye.png' %}" class = "form-option-icon" title = "Preview" alt = "Preview icon" />
+        {% if form.is_quiz %}
+        <a href="/" id="add-score">
+            <img src = "{% static 'Icon/score.png' %}" class = "form-option-icon" title = "Add score" alt = "Score icon" />
+        </a>
+        {% endif %}
     </div>
     <div class="modal" id="customize-theme">
         <div class="modal-content">
