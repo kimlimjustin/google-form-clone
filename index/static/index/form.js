@@ -112,14 +112,31 @@ document.addEventListener("DOMContentLoaded", () => {
         if(document.querySelector("#is_quiz").checked){
             if(!document.querySelector("#add-score")){
                 let is_quiz = document.createElement('a')
-                is_quiz.setAttribute("href", "/");
+                is_quiz.setAttribute("href", "score");
                 is_quiz.setAttribute("id", "add-score");
                 is_quiz.innerHTML = `<img src = "/static/Icon/score.png" id="add-score" class = "form-option-icon" title = "Add score" alt = "Score icon" />`;
                 document.querySelector(".question-options").appendChild(is_quiz)
             }
+            if(!document.querySelector(".score")){
+                let quiz_nav = document.createElement("span");
+                quiz_nav.classList.add("col-4");
+                quiz_nav.classList.add("navigation");
+                quiz_nav.classList.add('score');
+                quiz_nav.innerHTML =   `<a href = "score" class="link">Scores</a>`;
+                [...document.querySelector(".form-navigation").children].forEach(element => {
+                    element.classList.remove("col-6")
+                    element.classList.add('col-4')
+                })
+                document.querySelector(".form-navigation").insertBefore(quiz_nav, document.querySelector(".form-navigation").childNodes[2])
+            }
         }else{
-            if(document.querySelector("#add-score")){
-                document.querySelector("#add-score").parentNode.removeChild(document.querySelector("#add-score"))
+            if(document.querySelector("#add-score")) document.querySelector("#add-score").parentNode.removeChild(document.querySelector("#add-score"))
+            if(document.querySelector(".score")){
+                [...document.querySelector(".form-navigation").children].forEach(element => {
+                    element.classList.remove("col-4")
+                    element.classList.add('col-6')
+                })
+                document.querySelector(".score").parentNode.removeChild(document.querySelector(".score"))
             }
         }
     })

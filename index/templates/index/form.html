@@ -24,9 +24,14 @@
     </div>
     <div class="form-topnav">
         <div class="form-navigation center">
+            {% if form.is_quiz %}
             <span class="col-4 navigation active">Questions</span>
-            <span class="col-4 navigation"><a href = "{% url 'score' form.code %}" class="link">Scores</a></span>
+            <span class="col-4 navigation score"><a href = "{% url 'score' form.code %}" class="link">Scores</a></span>
             <span class="col-4 navigation"><a href = "" class="link">Responses</a></span>
+            {% else %}
+            <span class="col-6 navigation active">Questions</span>
+            <span class="col-6 navigation"><a href = "" class="link">Responses</a></span>
+            {% endif %}
         </div>
     </div>
     <div class="container">
@@ -98,8 +103,8 @@
             </div>
             {% endif %}
             <div class="choice-option">
-                <input type="checkbox" class="required-checkbox" id="{{question.id}}" data-id="{{question.id}}" {% if question.required %}checked{% endif %}>
-                <label for="{{question.id}}" class="required">Required</label>
+                <input type="checkbox" class="required-checkbox" id="required-{{question.id}}" data-id="{{question.id}}" {% if question.required %}checked{% endif %}>
+                <label for="required-{{question.id}}" class="required">Required</label>
                 <div class="float-right">
                     <img src="{% static 'Icon/dustbin.png' %}" alt="Delete question icon" class="question-option-icon delete-question" title="Delete question"
                     data-id="{{question.id}}">

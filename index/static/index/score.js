@@ -95,4 +95,16 @@ document.addEventListener("DOMContentLoaded", () => {
             tx.style.height = (10 + tx.scrollHeight)+"px";
         })
     })
+    document.querySelectorAll(".input-score").forEach(element => {
+        element.addEventListener("input", function(){
+            fetch('edit_score', {
+                method: "POST",
+                headers: {'X-CSRFToken': csrf},
+                body: JSON.stringify({
+                    question_id: this.dataset.id,
+                    score: this.value
+                })
+            })
+        })
+    })
 })

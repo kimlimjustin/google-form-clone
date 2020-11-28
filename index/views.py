@@ -386,11 +386,37 @@ def score(request, code):
     if formInfo.creator != request.user:
         return HttpResponseRedirect(reverse("403"))
     if not formInfo.is_quiz:
-        return HttpResponseRedirect(reverse("404"))
+        return HttpResponseRedirect(reverse("edit_form", args = [code]))
     else:
         return render(request, "index/score.html", {
             "form": formInfo
         })
+
+def edit_score(request, code):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect(reverse("login"))
+    formInfo = Form.objects.filter(code = code)
+    #Checking if form exists
+    if formInfo.count() == 0:
+        return HttpResponseRedirect(reverse('404'))
+    else: formInfo = formInfo[0]
+    #Checking if form creator is user
+    if formInfo.creator != request.user:
+        return HttpResponseRedirect(reverse("403"))
+    if not formInfo.is_quiz:
+        return HttpResponseRedirect(reverse("edit_form", args = [code]))
+    else:
+        if request.method == "POST":
+            data = json.loads(request.body)
+            question_id = data["question_id"]
+            question = formInfo.questions.filter(id = question_id)
+            if question.count() == 0:
+                return HttpResponseRedirect(reverse("edit_form", args = [code]))
+            else: question = question[0]
+            question.score = data["score"]
+            question.save()
+            return JsonResponse({"message": "Success"})
+
 
 # Error handler
 def FourZeroThree(request):

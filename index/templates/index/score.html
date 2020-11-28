@@ -46,7 +46,11 @@
         </div>
         {% for question in form.questions.all %}
         <div class="margin-top-bottom box question-box question" data-id="{{question.id}}">
-            <h1 class="question-title">{{question.question}}</h1>
+            <h2 class="question-title-score">{{question.question}}</h2>
+            <div class="question-score">
+                <input type="number" data-id="{{question.id}}" id="score" class="input-score" value="{{question.score}}">
+                <label for="score">Scores</label>
+            </div>
         </div>
         {% endfor %}
     </div>

@@ -14,7 +14,8 @@ class Questions(models.Model):
     question_type = models.CharField(max_length=20)
     required = models.BooleanField(default= False)
     answer_key = models.CharField(max_length = 5000, blank = True)
-    score = models.IntegerField(blank = True, null = True)
+    score = models.IntegerField(blank = True, default=0)
+    feedback = models.CharField(max_length = 5000, null = True)
     choices = models.ManyToManyField(Choices, related_name = "choices")
 
 class Answer(models.Model):
