@@ -491,6 +491,49 @@ def view_form(request, code):
         "form": formInfo
     })
 
+def get_client_ip(request):
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    if x_forwarded_for:
+        ip = x_forwarded_for.split(',')[0]
+    else:
+        ip = request.META.get('REMOTE_ADDR')
+    return ip
+
+def submit_form(request, code):
+    formInfo = Form.objects.filter(code = code)
+    #Checking if form exists
+    if formInfo.count() == 0:
+        return HttpResponseRedirect(reverse('404'))
+    else: formInfo = formInfo[0]
+    if formInfo.authenticated_responder:
+        if not request.user.is_authenticated:
+            return HttpResponseRedirect(reverse("login"))
+    if request.method == "POST":
+        code = ''.join(random.choice(string.ascii_letters + string.digits) for x in range(20))
+        if formInfo.authenticated_responder:
+            response = Responses(response_code = code, response_to = formInfo, responder_ip = get_client_ip(request), responder = request.user)
+            response.save()
+        else:
+            if not formInfo.collect_email:
+                response = Responses(response_code = code, response_to = formInfo, responder_ip = get_client_ip(request))
+                response.save()
+            else:
+                response = Responses(response_code = code, response_to = formInfo, responder_ip = get_client_ip(request), responder_email=request.POST["email-address"])
+                response.save()
+        for i in request.POST:
+            #Excluding csrf token
+            if i == "csrfmiddlewaretoken" or i == "email-address":
+                continue
+            question = formInfo.questions.get(id = i)
+            for j in request.POST.getlist(i):
+                answer = Answer(answer=j, answer_to = question)
+                answer.save()
+                response.response.add(answer)
+                response.save()
+        return render(request, "index/form_response.html", {
+            "form": formInfo
+        })
+
 # Error handler
 def FourZeroThree(request):
     return render(request, "error/403.html")

@@ -561,12 +561,23 @@ input[type=number]::-webkit-outer-spin-button {
 .btn-submit{
     background-color: #1a73e8;
     color: #fff;
-    border: 1px solid #fff
+    border: 1px solid #fff;
+    cursor: pointer;
 }
 
 .required-info{
     color: #E71C23;
     margin: 10px;
+}
+
+.edit-form-link{
+    width: 4rem;
+    height: 4rem;
+    position: fixed;
+    bottom: 50px;
+    right: 0%;
+    border-radius: 50%;
+    border: 1px solid #5f6368;
 }
 @media only screen and (max-width: 768px){
     .nav-form-title{

@@ -1,0 +1,15 @@
+{% extends 'index/layout.html' %}
+{% load static %}
+{% block script %}
+<script src="{% static 'index/viewform.js' %}" defer></script>
+{% endblock %}
+{% block body %}
+<div class="container">
+    <span id="bg-color" style="display: none;">{{form.background_color}}</span>
+    <span id="text-color" style="display: none;">{{form.text_color}}</span>
+    <div class="margin-top-bottom box box-shadow bg-white">
+        <h1 class="form-title txtClr">{{form.title}}</h1>
+        <p class="text-label">{{form.confirmation_message}}</p>
+    </div>
+</div>
+{% endblock %}

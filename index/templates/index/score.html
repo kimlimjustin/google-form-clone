@@ -91,7 +91,9 @@
         {% endfor %}
     </div>
     <div class="question-options">
-        <img src = "{% static 'Icon/eye.png' %}" class = "form-option-icon" title = "Preview" alt = "Preview icon" />
+        <a href="{% url 'view_form' form.code %}">
+            <img src = "{% static 'Icon/eye.png' %}" class = "form-option-icon" title = "Preview" alt = "Preview icon" />
+        </a>
         <a href="{% url 'edit_form' form.code %}">
             <img src = "{% static 'Icon/question.png' %}" class = "form-option-icon" title = "Questions" alt = "Question icon" />
         </a>

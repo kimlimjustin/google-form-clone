@@ -6,9 +6,10 @@
 {% endblock %}
 {% block body %}
 <div class="container-fluid">
-    <form class="container">
+    <form class="container" method="POST" action="{% url 'submit_form' form.code %}" autocomplete="off">
         <span id="bg-color" style="display: none;">{{form.background_color}}</span>
         <span id="text-color" style="display: none;">{{form.text_color}}</span>
+        {% csrf_token %}
         <div class="margin-top-bottom box question-box">
             <div class="form-title-box">
                 <h1 class="form-title txtClr">{{form.title}}</h1>
@@ -19,27 +20,27 @@
         {% if form.collect_email %}
         <div class="margin-top-bottom box question-box">
             <h1 class="question-title txtClr">Email address: <span class="require-star">*</span></h1>
-            <input type="email" name="email-address" class="short-answer" placeholder="Your email address">
+            <input type="email" name="email-address" class="short-answer" placeholder="Your email address" required>
         </div>
         {% endif %}
         {% for question in form.questions.all %}
         <div class="margin-top-bottom box question-box">
             <h1 class="question-title txtClr">{{question.question}} {% if question.required %}<span class="require-star">*</span>{% endif %}</h1>
             {% if question.question_type == "short" %}
-                <input type="text" name="{{i.question}}" class="short-answer" placeholder = "Your answer" {% if question.required %} required {% endif %}>
+                <input type="text" name="{{question.id}}" class="short-answer" placeholder = "Your answer" {% if question.required %} required {% endif %}>
             {% elif question.question_type == "paragraph" %}
-                <textarea name="{{i.question}}" placeholder="Your answer" class="long-answer textarea-adjust" {% if question.required %} required {% endif %}></textarea>
+                <textarea name="{{question.id}}" placeholder="Your answer" class="long-answer textarea-adjust" {% if question.required %} required {% endif %}></textarea>
             {% elif question.question_type == "multiple choice" %}
                 {% for choice in question.choices.all %}
                 <div class="multiple-choice">
-                    <input type="radio" name="{{question.id}}" id="{{choice.id}}" {% if question.required %} required {% endif %}>
+                    <input type="radio" name="{{question.id}}" id="{{choice.id}}" {% if question.required %} required {% endif %} value="{{choice.id}}">
                     <label for="{{choice.id}}" class="txtClr">{{choice.choice}}</label>
                 </div>
                 {% endfor %}
             {% elif question.question_type == "checkbox" %}
             {% for choice in question.choices.all %}
                 <div class="multiple-choice">
-                    <input type="checkbox" name="{{question.id}}" id="{{choice.id}}" {% if question.required %} required {% endif %}>
+                    <input type="checkbox" name="{{question.id}}" id="{{choice.id}}" {% if question.required %} required {% endif %} value="{{choice.id}}">
                     <label for="{{choice.id}}" class="txtClr">{{choice.choice}}</label>
                 </div>
                 {% endfor %}
@@ -50,5 +51,10 @@
             <input type="submit" value="Submit" class="btn btn-submit">
         </div>
     </form>
+    {% if user == form.creator %}
+        <a href="{% url 'edit_form' form.code %}">
+            <img src="{% static 'Icon/question.png' %}" alt="Edit Question" title="Edit this form" class="edit-form-link">
+        </a>
+    {% endif %}
 </div>
 {% endblock %}
