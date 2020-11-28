@@ -478,6 +478,19 @@ def feedback(request, code):
             question.save()
             return JsonResponse({'message': "Success"})
 
+def view_form(request, code):
+    formInfo = Form.objects.filter(code = code)
+    #Checking if form exists
+    if formInfo.count() == 0:
+        return HttpResponseRedirect(reverse('404'))
+    else: formInfo = formInfo[0]
+    if formInfo.authenticated_responder:
+        if not request.user.is_authenticated:
+            return HttpResponseRedirect(reverse("login"))
+    return render(request, "index/view_form.html", {
+        "form": formInfo
+    })
+
 # Error handler
 def FourZeroThree(request):
     return render(request, "error/403.html")

@@ -16,7 +16,9 @@
         <input class="nav-text nav-form-title edit-on-click input-form-title" value  = "{{form.title}}" type="text">
         <div class="float-right">
             <img src="{% static 'Icon/theme.png' %}" alt="Theme icon" id="customize-theme-btn" title = "Customize theme" class="nav-form-menu-icon" />
+            <a href="{% url 'view_form' form.code %}">
             <img src="{% static 'Icon/eye.png' %}" alt="Preview icon" title = "Preview" class="nav-form-menu-icon big-screen" />
+            </a>
             <img src="{% static 'Icon/send.png' %}" alt ="Send icon" title = "Send" class="nav-form-menu-icon small-screen" />
             <img src="{% static 'Icon/setting.png' %}" alt="Setting icon" title = "Setting" class="nav-form-menu-icon open-setting" />
             <button class = "btn send-form-btn big-screen">Send</button>
@@ -115,7 +117,9 @@
     </div>
     <div class="question-options">
         <img src = "{% static 'Icon/add.png' %}" class="form-option-icon" title = "Add question" alt = "Add question icon" id="add-question" />
-        <img src = "{% static 'Icon/eye.png' %}" class = "form-option-icon" title = "Preview" alt = "Preview icon" />
+        <a href="{% url 'view_form' form.code %}">
+            <img src = "{% static 'Icon/eye.png' %}" class = "form-option-icon" title = "Preview" alt = "Preview icon" />
+        </a>
         {% if form.is_quiz %}
         <a href = "{% url 'score' form.code %}" id="add-score">
             <img src = "{% static 'Icon/score.png' %}" class = "form-option-icon" title = "Add score" alt = "Score icon" />

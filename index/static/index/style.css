@@ -552,6 +552,22 @@ input[type=number]::-webkit-outer-spin-button {
     font-family: "Roboto Condensed";
     display: inline-block;
 }
+
+.multiple-choice{
+    width: 100%;
+    margin: 5px;
+}
+
+.btn-submit{
+    background-color: #1a73e8;
+    color: #fff;
+    border: 1px solid #fff
+}
+
+.required-info{
+    color: #E71C23;
+    margin: 10px;
+}
 @media only screen and (max-width: 768px){
     .nav-form-title{
         width: 100px;
