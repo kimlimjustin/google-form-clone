@@ -50,7 +50,7 @@
             <h2 class="question-title-score">{{question.question}}</h2>
             <div class="question-score">
                 <input type="number" data-id="{{question.id}}" id="score" class="input-score" value="{{question.score}}">
-                <label for="score">Scores</label>
+                <label for="score">Points</label>
             </div>
             <div class="answer-key">
                 <p class="answer-key-title">Answer key:</p>
@@ -77,6 +77,14 @@
                         <label for="choice-{{i.id}}">{{i.choice}}</label>
                     </div>
                     {% endfor %}
+                {% endif %}
+            </div>
+            <div class="feedback">
+                <p class="feedback-title">Feedback:</p>
+                {% if question.feedback != None %}
+                <textarea class="long-answer textarea-adjust" data-id="{{question.id}}" name="feedback">{{question.feedback}}</textarea>
+                {% else %}
+                <textarea class="long-answer textarea-adjust" data-id="{{question.id}}" name="feedback"></textarea>
                 {% endif %}
             </div>
         </div>

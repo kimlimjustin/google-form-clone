@@ -544,10 +544,10 @@ input[type=number]::-webkit-outer-spin-button {
     margin: 1rem;
 }
 
-.answer-key{
+.answer-key, .feedback{
     margin: 5px 10px;
 }
-.answer-key-title{
+.answer-key-title, .feedback-title{
     margin: 0;
     font-family: "Roboto Condensed";
     display: inline-block;

@@ -144,4 +144,16 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         })
     })
+    document.getElementsByName('feedback').forEach(element => {
+        element.addEventListener("input", function(){
+            fetch('feedback', {
+                method: "POST",
+                headers: {'X-CSRFToken': csrf},
+                body: JSON.stringify({
+                    "question_id": this.dataset.id,
+                    "feedback": this.value
+                })
+            })
+        })
+    })
 })
