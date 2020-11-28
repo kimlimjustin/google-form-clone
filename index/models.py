@@ -32,7 +32,6 @@ class Form(models.Model):
     collect_email = models.BooleanField(default=False)
     authenticated_responder = models.BooleanField(default = False)
     edit_after_submit = models.BooleanField(default=False)
-    see_response = models.BooleanField(default=False)
     confirmation_message = models.CharField(max_length = 10000, default = "Your response has been recorded.")
     is_quiz = models.BooleanField(default=False)
     allow_view_score = models.BooleanField(default= True)

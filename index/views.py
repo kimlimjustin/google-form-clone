@@ -200,7 +200,6 @@ def edit_setting(request, code):
         formInfo.confirmation_message = data["confirmation_message"]
         formInfo.edit_after_submit = data["edit_after_submit"]
         formInfo.allow_view_score = data["allow_view_score"]
-        formInfo.see_response = data["see_response"]
         formInfo.save()
         return JsonResponse({'message': "Success"})
 
@@ -533,6 +532,22 @@ def submit_form(request, code):
         return render(request, "index/form_response.html", {
             "form": formInfo
         })
+
+def responses(request, code):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect(reverse("login"))
+    formInfo = Form.objects.filter(code = code)
+    #Checking if form exists
+    if formInfo.count() == 0:
+        return HttpResponseRedirect(reverse('404'))
+    else: formInfo = formInfo[0]
+    #Checking if form creator is user
+    if formInfo.creator != request.user:
+        return HttpResponseRedirect(reverse("403"))
+    return render(request, "index/responses.html", {
+        "form": formInfo,
+        "responses": Responses.objects.filter(response_to = formInfo)
+    })
 
 # Error handler
 def FourZeroThree(request):

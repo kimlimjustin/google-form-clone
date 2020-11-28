@@ -27,6 +27,7 @@ urlpatterns = [
     path('form/<str:code>/feedback', views.feedback, name="feedback"),
     path('form/<str:code>/viewform', views.view_form, name="view_form"),
     path('form/<str:code>/submit', views.submit_form, name="submit_form"),
+    path('form/<str:code>/responses', views.responses, name='responses'),
     path('403', views.FourZeroThree, name="403"),
     path('404', views.FourZeroFour, name="404")
 ]

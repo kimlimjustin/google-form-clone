@@ -1,8 +1,8 @@
 {% extends 'index/layout.html' %}
 {% load static %}
-{% block title %}{{form.title}} ~ Google Forms CLONE{% endblock %}
+{% block title %}{{form.title}}'s response ~ Google Forms CLONE{% endblock %}
 {% block script %}
-<script src="{% static 'index/score.js' %}" defer></script>
+<script src="{% static 'index/responses.js' %}" defer></script>
 <script src="{% static 'lib/cookie.min.js' %}"></script>
 {% endblock %}
 {% block body %}
@@ -22,80 +22,32 @@
     </div>
     <div class="form-topnav">
         <div class="form-navigation center">
+            {% if form.is_quiz %}
             <span class="col-4 navigation"><a href = "{% url 'edit_form' form.code %}" class="link">Questions</a></span>
-            <span class="col-4 navigation active">Scores</span>
-            <span class="col-4 navigation"><a href = "{% url 'responses' form.code %}" class="link">Responses</a></span>
+            <span class="col-4 navigation score"><a href="{% url 'score' form.code %}" class="link">Scores</a></span>
+            <span class="col-4 navigation active">Responses</span>
+            {% else %}
+            <span class="col-6 navigation"><a href = "{% url 'edit_form' form.code %}" class="link">Questions</a></span>
+            <span class="col-6 navigation active">Responses</span>
+            {% endif %}
         </div>
     </div>
     <div class="container">
         <span id="bg-color" style="display: none;">{{form.background_color}}</span>
         <span id="text-color" style="display: none;">{{form.text_color}}</span>
-        <div class="margin-top-bottom box question-box" id="form-head">
-            <div class="form-title-box">
-                <h1 class="form-title edit-on-click txt-clr">{{form.title}}</h1>
-            </div>
-            <p class="form-description edit-on-click textarea-adjust txt-clr">{{form.description|linebreaksbr}}</p>
-            {% if form.collect_email %}
-            <div class="collect-email txt-clr">
-                <h3 class="question-title">Email address <span class="require-star">*</span></h3>
-                <input type="text" autoComplete="off" aria-label="Valid email address" disabled dir = "auto" class="require-email-edit txtColor"
-                placeholder = "Valid email address" />
-                <p class="collect-email-desc">This form is collecting email addresses. <span class="open-setting">Change settings</span></p>
-            </div>
-            {% endif %}
-        </div>
-        {% for question in form.questions.all %}
-        <div class="margin-top-bottom box question-box question" data-id="{{question.id}}">
-            <h2 class="question-title-score">{{question.question}}</h2>
-            <div class="question-score">
-                <input type="number" data-id="{{question.id}}" id="score" class="input-score" value="{{question.score}}">
-                <label for="score">Points</label>
-            </div>
-            <div class="answer-key">
-                <p class="answer-key-title">Answer key:</p>
-                {% if question.question_type == "short" %}
-                    <input type="text" class="short-answer" data-id="{{question.id}}" data-question-type = "{{question.question_type}}" answer-key
-                    value="{{question.answer_key}}">
-                {% elif question.question_type == "paragraph" %}
-                    <textarea class="long-answer textarea-adjust" data-question-type = "{{question.question_type}}" answer-key 
-                    data-id="{{question.id}}">{{question.answer_key}}
-                    </textarea>
-                {% elif question.question_type == "multiple choice" %}
-                    {% for i in question.choices.all %}
-                    <div class="form-group">
-                        <input type="radio" name="{{question.id}}-answer" id="choice-{{i.id}}" data-id="{{question.id}}" value="{{i.id}}" answer-key
-                        data-question_type = "{{question.question_type}}" {% if i.is_answer %} checked {% endif %}>
-                        <label for="choice-{{i.id}}">{{i.choice}}</label>
-                    </div>
-                    {% endfor %}
-                {% elif question.question_type == "checkbox" %}
-                    {% for i in question.choices.all %}
-                    <div class="form-group">
-                        <input type="checkbox" name="{{question.id}}-answer" id="choice-{{i.id}}" data-id="{{question.id}}" value="{{i.id}}"
-                        data-question_type = "{{question.question_type}}" answer-key {% if i.is_answer %} checked {% endif %}>
-                        <label for="choice-{{i.id}}">{{i.choice}}</label>
-                    </div>
-                    {% endfor %}
-                {% endif %}
-            </div>
-            <div class="feedback">
-                <p class="feedback-title">Feedback:</p>
-                {% if question.feedback != None %}
-                <textarea class="long-answer textarea-adjust" data-id="{{question.id}}" name="feedback">{{question.feedback}}</textarea>
-                {% else %}
-                <textarea class="long-answer textarea-adjust" data-id="{{question.id}}" name="feedback"></textarea>
-                {% endif %}
-            </div>
-        </div>
-        {% endfor %}
     </div>
     <div class="question-options">
         <a href="{% url 'view_form' form.code %}">
             <img src = "{% static 'Icon/eye.png' %}" class = "form-option-icon" title = "Preview" alt = "Preview icon" />
         </a>
         <a href="{% url 'edit_form' form.code %}">
-            <img src = "{% static 'Icon/question.png' %}" class = "form-option-icon" title = "Questions" alt = "Question icon" />
+            <img src="{% static 'Icon/question.png' %}" alt="Edit Question" title="Edit this form" class="form-option-icon">
         </a>
+        {% if form.is_quiz %}
+        <a href = "{% url 'score' form.code %}" id="add-score">
+            <img src = "{% static 'Icon/score.png' %}" class = "form-option-icon" title = "Add score" alt = "Score icon" />
+        </a>
+        {% endif %}
     </div>
     <div class="modal" id="customize-theme">
         <div class="modal-content">
@@ -181,4 +133,5 @@
         </div>
     </div>
 </div>
+
 {% endblock %}

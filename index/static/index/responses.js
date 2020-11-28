@@ -75,14 +75,31 @@ document.addEventListener("DOMContentLoaded", () => {
         if(document.querySelector("#is_quiz").checked){
             if(!document.querySelector("#add-score")){
                 let is_quiz = document.createElement('a')
-                is_quiz.setAttribute("href", "/");
+                is_quiz.setAttribute("href", "score");
                 is_quiz.setAttribute("id", "add-score");
                 is_quiz.innerHTML = `<img src = "/static/Icon/score.png" id="add-score" class = "form-option-icon" title = "Add score" alt = "Score icon" />`;
                 document.querySelector(".question-options").appendChild(is_quiz)
             }
+            if(!document.querySelector(".score")){
+                let quiz_nav = document.createElement("span");
+                quiz_nav.classList.add("col-4");
+                quiz_nav.classList.add("navigation");
+                quiz_nav.classList.add('score');
+                quiz_nav.innerHTML =   `<a href = "score" class="link">Scores</a>`;
+                [...document.querySelector(".form-navigation").children].forEach(element => {
+                    element.classList.remove("col-6")
+                    element.classList.add('col-4')
+                })
+                document.querySelector(".form-navigation").insertBefore(quiz_nav, document.querySelector(".form-navigation").childNodes[2])
+            }
         }else{
-            if(document.querySelector("#add-score")){
-                document.querySelector("#add-score").parentNode.removeChild(document.querySelector("#add-score"))
+            if(document.querySelector("#add-score")) document.querySelector("#add-score").parentNode.removeChild(document.querySelector("#add-score"))
+            if(document.querySelector(".score")){
+                [...document.querySelector(".form-navigation").children].forEach(element => {
+                    element.classList.remove("col-4")
+                    element.classList.add('col-6')
+                })
+                document.querySelector(".score").parentNode.removeChild(document.querySelector(".score"))
             }
         }
     })
@@ -92,67 +109,6 @@ document.addEventListener("DOMContentLoaded", () => {
         tx.addEventListener('input', e => {
             tx.style.height = "auto";
             tx.style.height = (10 + tx.scrollHeight)+"px";
-        })
-    })
-    document.querySelectorAll(".input-score").forEach(element => {
-        element.addEventListener("input", function(){
-            fetch('edit_score', {
-                method: "POST",
-                headers: {'X-CSRFToken': csrf},
-                body: JSON.stringify({
-                    question_id: this.dataset.id,
-                    score: this.value
-                })
-            })
-        })
-    })
-    document.querySelectorAll("[answer-key]").forEach(element => {
-        element.addEventListener("input", function(){
-            if(this.dataset.question_type === "multiple choice"){
-                fetch('answer_key', {
-                    method: "POST",
-                    headers: {'X-CSRFToken': csrf},
-                    body: JSON.stringify({
-                        "question_id": this.dataset.id,
-                        "answer_key": document.querySelector(`input[name="${this.name}"]:checked`).value
-                    })
-                })
-            }else if(this.dataset.question_type === "checkbox"){
-                answers = []
-                document.getElementsByName(this.name).forEach(element => {
-                    if(element.checked) answers.push(element.value)
-                })
-                fetch('answer_key', {
-                    method: "POST",
-                    headers: {'X-CSRFToken': csrf},
-                    body: JSON.stringify({
-                        "question_id": this.dataset.id,
-                        "answer_key": answers
-                    })
-                })
-            }
-            else{
-                fetch('answer_key', {
-                    method: "POST",
-                    headers: {'X-CSRFToken': csrf},
-                    body: JSON.stringify({
-                        "question_id": this.dataset.id,
-                        "answer_key": this.value
-                    })
-                })
-            }
-        })
-    })
-    document.getElementsByName('feedback').forEach(element => {
-        element.addEventListener("input", function(){
-            fetch('feedback', {
-                method: "POST",
-                headers: {'X-CSRFToken': csrf},
-                body: JSON.stringify({
-                    "question_id": this.dataset.id,
-                    "feedback": this.value
-                })
-            })
         })
     })
 })

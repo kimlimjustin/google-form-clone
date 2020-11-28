@@ -92,7 +92,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 "confirmation_message": document.querySelector("#comfirmation_message").value,
                 "edit_after_submit": document.querySelector("#edit_after_submit").checked,
                 "allow_view_score": document.querySelector("#allow_view_score").checked,
-                "see_response": document.querySelector("#see_response").checked
             })
         })
         document.querySelector("#setting").style.display = "none";
