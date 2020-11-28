@@ -107,4 +107,41 @@ document.addEventListener("DOMContentLoaded", () => {
             })
         })
     })
+    document.querySelectorAll("[answer-key]").forEach(element => {
+        element.addEventListener("input", function(){
+            if(this.dataset.question_type === "multiple choice"){
+                fetch('answer_key', {
+                    method: "POST",
+                    headers: {'X-CSRFToken': csrf},
+                    body: JSON.stringify({
+                        "question_id": this.dataset.id,
+                        "answer_key": document.querySelector(`input[name="${this.name}"]:checked`).value
+                    })
+                })
+            }else if(this.dataset.question_type === "checkbox"){
+                answers = []
+                document.getElementsByName(this.name).forEach(element => {
+                    if(element.checked) answers.push(element.value)
+                })
+                fetch('answer_key', {
+                    method: "POST",
+                    headers: {'X-CSRFToken': csrf},
+                    body: JSON.stringify({
+                        "question_id": this.dataset.id,
+                        "answer_key": answers
+                    })
+                })
+            }
+            else{
+                fetch('answer_key', {
+                    method: "POST",
+                    headers: {'X-CSRFToken': csrf},
+                    body: JSON.stringify({
+                        "question_id": this.dataset.id,
+                        "answer_key": this.value
+                    })
+                })
+            }
+        })
+    })
 })

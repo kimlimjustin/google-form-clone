@@ -1,5 +1,6 @@
 {% extends 'index/layout.html' %}
 {% load static %}
+{% block title %}{{form.title}} ~ Google Forms CLONE{% endblock %}
 {% block script %}
 <script src="{% static 'index/score.js' %}" defer></script>
 <script src="{% static 'lib/cookie.min.js' %}"></script>
@@ -50,6 +51,33 @@
             <div class="question-score">
                 <input type="number" data-id="{{question.id}}" id="score" class="input-score" value="{{question.score}}">
                 <label for="score">Scores</label>
+            </div>
+            <div class="answer-key">
+                <p class="answer-key-title">Answer key:</p>
+                {% if question.question_type == "short" %}
+                    <input type="text" class="short-answer" data-id="{{question.id}}" data-question-type = "{{question.question_type}}" answer-key
+                    value="{{question.answer_key}}">
+                {% elif question.question_type == "paragraph" %}
+                    <textarea class="long-answer textarea-adjust" data-question-type = "{{question.question_type}}" answer-key 
+                    data-id="{{question.id}}">{{question.answer_key}}
+                    </textarea>
+                {% elif question.question_type == "multiple choice" %}
+                    {% for i in question.choices.all %}
+                    <div class="form-group">
+                        <input type="radio" name="{{question.id}}-answer" id="choice-{{i.id}}" data-id="{{question.id}}" value="{{i.id}}" answer-key
+                        data-question_type = "{{question.question_type}}" {% if i.is_answer %} checked {% endif %}>
+                        <label for="choice-{{i.id}}">{{i.choice}}</label>
+                    </div>
+                    {% endfor %}
+                {% elif question.question_type == "checkbox" %}
+                    {% for i in question.choices.all %}
+                    <div class="form-group">
+                        <input type="checkbox" name="{{question.id}}-answer" id="choice-{{i.id}}" data-id="{{question.id}}" value="{{i.id}}"
+                        data-question_type = "{{question.question_type}}" answer-key {% if i.is_answer %} checked {% endif %}>
+                        <label for="choice-{{i.id}}">{{i.choice}}</label>
+                    </div>
+                    {% endfor %}
+                {% endif %}
             </div>
         </div>
         {% endfor %}

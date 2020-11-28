@@ -23,6 +23,7 @@ urlpatterns = [
     path('form/<str:code>/delete_question/<str:question>', views.delete_question, name="delete_question"),
     path('form/<str:code>/score', views.score, name="score"),
     path('form/<str:code>/edit_score', views.edit_score, name="edit_score"),
+    path('form/<str:code>/answer_key', views.answer_key, name="answer_key"),
     path('403', views.FourZeroThree, name="403"),
     path('404', views.FourZeroFour, name="404")
 ]

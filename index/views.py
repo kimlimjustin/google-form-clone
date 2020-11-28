@@ -413,9 +413,49 @@ def edit_score(request, code):
             if question.count() == 0:
                 return HttpResponseRedirect(reverse("edit_form", args = [code]))
             else: question = question[0]
-            question.score = data["score"]
+            score = data["score"]
+            if score == "": score = 0
+            question.score = score
             question.save()
             return JsonResponse({"message": "Success"})
+
+def answer_key(request, code):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect(reverse("login"))
+    formInfo = Form.objects.filter(code = code)
+    #Checking if form exists
+    if formInfo.count() == 0:
+        return HttpResponseRedirect(reverse('404'))
+    else: formInfo = formInfo[0]
+    #Checking if form creator is user
+    if formInfo.creator != request.user:
+        return HttpResponseRedirect(reverse("403"))
+    if not formInfo.is_quiz:
+        return HttpResponseRedirect(reverse("edit_form", args = [code]))
+    else:
+        if request.method == "POST":
+            data = json.loads(request.body)
+            question = Questions.objects.filter(id = data["question_id"])
+            if question.count() == 0: return HttpResponseRedirect(reverse("edit_form", args = [code]))
+            else: question = question[0]
+            if question.question_type == "short" or question.question_type == "paragraph":
+                question.answer_key = data["answer_key"]
+                question.save()
+            else:
+                for i in question.choices.all():
+                    i.is_answer = False
+                    i.save()
+                if question.question_type == "multiple choice":
+                    choice = question.choices.get(pk = data["answer_key"])
+                    choice.is_answer = True
+                    choice.save()
+                else:
+                    for i in data["answer_key"]:
+                        choice = question.choices.get(id = i)
+                        choice.is_answer = True
+                        choice.save()
+                question.save()
+            return JsonResponse({'message': "Success"})
 
 
 # Error handler
