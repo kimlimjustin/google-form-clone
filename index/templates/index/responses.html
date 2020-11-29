@@ -14,7 +14,9 @@
         <span class="nav-text nav-form-title input-form-title">{{form.title}}</span>
         <div class="float-right">
             <img src="{% static 'Icon/theme.png' %}" alt="Theme icon" id="customize-theme-btn" title = "Customize theme" class="nav-form-menu-icon" />
-            <img src="{% static 'Icon/eye.png' %}" alt="Preview icon" title = "Preview" class="nav-form-menu-icon big-screen" />
+            <a href="{% url 'view_form' form.code %}">
+                <img src="{% static 'Icon/eye.png' %}" alt="Preview icon" title = "Preview" class="nav-form-menu-icon big-screen" />
+            </a>
             <img src="{% static 'Icon/send.png' %}" alt ="Send icon" title = "Send" class="nav-form-menu-icon small-screen" />
             <img src="{% static 'Icon/setting.png' %}" alt="Setting icon" title = "Setting" class="nav-form-menu-icon open-setting" />
             <button class = "btn send-form-btn big-screen">Send</button>
@@ -35,6 +37,20 @@
     <div class="container">
         <span id="bg-color" style="display: none;">{{form.background_color}}</span>
         <span id="text-color" style="display: none;">{{form.text_color}}</span>
+        <div class="margin-top-bottom box question-box">
+            <h1 class="response-title">Individual Response:</h1>
+            <ul>
+                {% for i in responses %}
+                    {% if form.collect_email %}
+                        <li><a href = "" class="link">{{i.responder_email}}'s response</a></li>
+                    {% elif form.authenticated_responder %}
+                        <li><a href = "" class="link">{{i.responder.username}}'s response</a></li>
+                    {% else %}
+                        <li><a href = "" class="link">{{i.responder}}'s response</a></li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+        </div>
     </div>
     <div class="question-options">
         <a href="{% url 'view_form' form.code %}">

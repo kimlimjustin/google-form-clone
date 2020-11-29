@@ -174,6 +174,121 @@ document.addEventListener("DOMContentLoaded", () => {
         })
     }
     editQuestion();
+    
+    const editRequire = () => {
+        document.querySelectorAll(".required-checkbox").forEach(checkbox => {
+            checkbox.addEventListener('input', function(){
+                let question;
+                let question_type;
+                document.querySelectorAll(".input-question-type").forEach(qp => {
+                    if(qp.dataset.id === this.dataset.id) question_type = qp.value
+                })
+                document.querySelectorAll('.input-question').forEach(q => {
+                    if(q.dataset.id === this.dataset.id) question = q.value
+                })
+                fetch('edit_question', {
+                    method: "POST",
+                    headers: {'X-CSRFToken': csrf},
+                    body: JSON.stringify({
+                        id: this.dataset.id,
+                        question: question,
+                        question_type: question_type,
+                        required: this.checked
+                    })
+                })
+            })
+        })
+    }
+    editRequire()
+    const editChoice = () => {
+        document.querySelectorAll(".edit-choice").forEach(choice => {
+            choice.addEventListener("input", function(){
+                fetch('edit_choice', {
+                    method: "POST",
+                    headers: {'X-CSRFToken': csrf},
+                    body: JSON.stringify({
+                        "id": this.dataset.id,
+                        "choice": this.value
+                    })
+                })
+            })
+        })
+    }
+    editChoice()
+    const removeOption = () => {
+        document.querySelectorAll(".remove-option").forEach(ele => {
+            ele.addEventListener("click",function(){
+                fetch('remove_choice', {
+                    method: "POST",
+                    headers: {'X-CSRFToken': csrf},
+                    body: JSON.stringify({
+                        "id": this.dataset.id
+                    })
+                })
+                .then(() => {
+                    this.parentNode.parentNode.removeChild(this.parentNode)
+                })
+            })
+        })
+    }
+    removeOption()
+    const addOption = () => {
+        document.querySelectorAll(".add-option").forEach(question =>{
+            question.addEventListener("click", function(){
+                fetch('add_choice', {
+                    method: "POST",
+                    headers: {'X-CSRFToken': csrf},
+                    body: JSON.stringify({
+                        "question": this.dataset.question
+                    })
+                })
+                .then(response => response.json())
+                .then(result => {
+                    let element = document.createElement("div");
+                    element.classList.add('choice');
+                    if(this.dataset.type === "multiple choice"){
+                        element.innerHTML = `<input type="radio" id="${result["id"]}" disabled>
+                        <label for="${result["id"]}">
+                            <input type="text" value="${result["choice"]}" class="edit-choice" data-id="${result["id"]}">
+                        </label>
+                        <span class="remove-option" title = "Remove" data-id="${result["id"]}">&times;</span>`;
+                    }else if(this.dataset.type === "checkbox"){
+                        element.innerHTML = `<input type="checkbox" id="${result["id"]}" disabled>
+                        <label for="${result["id"]}">
+                            <input type="text" value="${result["choice"]}" class="edit-choice" data-id="${result["id"]}">
+                        </label>
+                        <span class="remove-option" title = "Remove" data-id="${result["id"]}">&times;</span>`;
+                    }
+                    document.querySelectorAll(".choices").forEach(choices => {
+                        if(choices.dataset.id === this.dataset.question){
+                            choices.insertBefore(element, choices.childNodes[choices.childNodes.length -2]);
+                            editChoice()
+                            removeOption()
+                        }
+                    });
+                })
+            })
+        })
+    }
+    addOption()
+    const deleteQuestion = () => {
+        document.querySelectorAll(".delete-question").forEach(question => {
+            question.addEventListener("click", function(){
+                fetch(`delete_question/${this.dataset.id}`, {
+                    method: "DELETE",
+                    headers: {'X-CSRFToken': csrf},
+                })
+                .then(() => {
+                    document.querySelectorAll(".question").forEach(q =>{
+                        if(q.dataset.id === this.dataset.id){
+                            q.parentNode.removeChild(q)
+                        }
+                    })
+                })
+            })
+        })
+    }
+    deleteQuestion()
     const changeType = () => {
         document.querySelectorAll(".input-question-type").forEach(ele => {
             ele.addEventListener('input', function(){
@@ -195,7 +310,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         required: required
                     })
                 })
-                
+
                 if(this.dataset.origin_type === "multiple choice" || this.dataset.origin_type === "checkbox"){
                     document.querySelectorAll(".choices").forEach(choicesElement => {
                         if(choicesElement.dataset.id === this.dataset.id){
@@ -316,125 +431,18 @@ document.addEventListener("DOMContentLoaded", () => {
                         }
                     })
                 }
-                this.setAttribute("data-origin_type", this.value)
+                this.setAttribute("data-origin_type", this.value);
+                editChoice()
+                removeOption()
+                changeType()
+                editQuestion()
+                editRequire()
+                addOption()
+                deleteQuestion()
             })
         })
     }
     changeType()
-    const editRequire = () => {
-        document.querySelectorAll(".required-checkbox").forEach(checkbox => {
-            checkbox.addEventListener('input', function(){
-                let question;
-                let question_type;
-                document.querySelectorAll(".input-question-type").forEach(qp => {
-                    if(qp.dataset.id === this.dataset.id) question_type = qp.value
-                })
-                document.querySelectorAll('.input-question').forEach(q => {
-                    if(q.dataset.id === this.dataset.id) question = q.value
-                })
-                fetch('edit_question', {
-                    method: "POST",
-                    headers: {'X-CSRFToken': csrf},
-                    body: JSON.stringify({
-                        id: this.dataset.id,
-                        question: question,
-                        question_type: question_type,
-                        required: this.checked
-                    })
-                })
-            })
-        })
-    }
-    editRequire()
-    const editChoice = () => {
-        document.querySelectorAll(".edit-choice").forEach(choice => {
-            choice.addEventListener("input", function(){
-                fetch('edit_choice', {
-                    method: "POST",
-                    headers: {'X-CSRFToken': csrf},
-                    body: JSON.stringify({
-                        "id": this.dataset.id,
-                        "choice": this.value
-                    })
-                })
-            })
-        })
-    }
-    editChoice()
-    const removeOption = () => {
-        document.querySelectorAll(".remove-option").forEach(ele => {
-            ele.addEventListener("click",function(){
-                fetch('remove_choice', {
-                    method: "POST",
-                    headers: {'X-CSRFToken': csrf},
-                    body: JSON.stringify({
-                        "id": this.dataset.id
-                    })
-                })
-                .then(() => {
-                    this.parentNode.parentNode.removeChild(this.parentNode)
-                })
-            })
-        })
-    }
-    removeOption()
-    const addOption = () => {
-        document.querySelectorAll(".add-option").forEach(question =>{
-            question.addEventListener("click", function(){
-                fetch('add_choice', {
-                    method: "POST",
-                    headers: {'X-CSRFToken': csrf},
-                    body: JSON.stringify({
-                        "question": this.dataset.question
-                    })
-                })
-                .then(response => response.json())
-                .then(result => {
-                    let element = document.createElement("div");
-                    element.classList.add('choice');
-                    if(this.dataset.type === "multiple choice"){
-                        element.innerHTML = `<input type="radio" id="${result["id"]}" disabled>
-                        <label for="${result["id"]}">
-                            <input type="text" value="${result["choice"]}" class="edit-choice" data-id="${result["id"]}">
-                        </label>
-                        <span class="remove-option" title = "Remove" data-id="${result["id"]}">&times;</span>`;
-                    }else if(this.dataset.type === "checkbox"){
-                        element.innerHTML = `<input type="checkbox" id="${result["id"]}" disabled>
-                        <label for="${result["id"]}">
-                            <input type="text" value="${result["choice"]}" class="edit-choice" data-id="${result["id"]}">
-                        </label>
-                        <span class="remove-option" title = "Remove" data-id="${result["id"]}">&times;</span>`;
-                    }
-                    document.querySelectorAll(".choices").forEach(choices => {
-                        if(choices.dataset.id === this.dataset.question){
-                            choices.insertBefore(element, choices.childNodes[choices.childNodes.length -2]);
-                            editChoice()
-                            removeOption()
-                        }
-                    });
-                })
-            })
-        })
-    }
-    addOption()
-    const deleteQuestion = () => {
-        document.querySelectorAll(".delete-question").forEach(question => {
-            question.addEventListener("click", function(){
-                fetch(`delete_question/${this.dataset.id}`, {
-                    method: "DELETE",
-                    headers: {'X-CSRFToken': csrf},
-                })
-                .then(() => {
-                    document.querySelectorAll(".question").forEach(q =>{
-                        if(q.dataset.id === this.dataset.id){
-                            q.parentNode.removeChild(q)
-                        }
-                    })
-                })
-            })
-        })
-    }
-    deleteQuestion()
     document.querySelector("#add-question").addEventListener("click", () => {
         fetch('add_question', {
             method: "POST",

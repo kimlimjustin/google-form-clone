@@ -44,6 +44,16 @@ document.addEventListener("DOMContentLoaded", () => {
             if(e.target == document.querySelector("#setting")) document.querySelector("#setting").style.display = "none";
         }
     })
+    document.querySelector("#delete-form").addEventListener("submit", e => {
+        e.preventDefault();
+        if(window.confirm("Are you sure? This action CANNOT be undone.")){
+            fetch('delete', {
+                method: "DELETE",
+                headers: {'X-CSRFToken': csrf}
+            })
+            .then(() => window.location = "/")
+        }
+    })
     document.querySelector("#setting-form").addEventListener("submit", e => {
         e.preventDefault();
         fetch('edit_setting', {

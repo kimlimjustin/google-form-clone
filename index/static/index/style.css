@@ -579,6 +579,12 @@ input[type=number]::-webkit-outer-spin-button {
     border-radius: 50%;
     border: 1px solid #5f6368;
 }
+
+.response-title{
+    font-family: "Google Sans";
+    font-size: 1.5rem;
+    font-weight: normal;
+}
 @media only screen and (max-width: 768px){
     .nav-form-title{
         width: 100px;

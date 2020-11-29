@@ -220,6 +220,10 @@ def delete_form(request, code):
             for j in i.choices.all():
                 j.delete()
             i.delete()
+        for i in Responses.objects.filter(response_to = formInfo):
+            for j in i.response.all():
+                j.delete()
+            i.delete()
         formInfo.delete()
         return JsonResponse({'message': "Success"})
 
