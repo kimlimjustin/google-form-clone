@@ -1,0 +1,66 @@
+{% extends 'index/layout.html' %}
+{% load static %}
+{% load get_response %}
+{% load to_int %}
+{% load is_response %}
+{% block script %}
+<script src="{% static 'index/response.js' %}"></script>
+{% endblock %}
+{% block body %}
+<div class="container-fluid">
+    <div class="container">
+        <span id="bg-color" style="display: none;">{{form.background_color}}</span>
+        <span id="text-color" style="display: none;">{{form.text_color}}</span>
+        <div class="margin-top-bottom box question-box">
+            <div class="form-title-box">
+                <h1 class="form-title txtClr">{{form.title}}</h1>
+                <p class="required-info">* Required</p>
+            </div>
+            <div class="form-description txtClr">{{form.description|linebreaksbr}}</div>
+        </div>
+        {% if form.collect_email %}
+        <div class="margin-top-bottom box question-box">
+            <h1 class="question-title txtClr">Email address: <span class="require-star">*</span></h1>
+            <p class="short-answer">{{response.responder_email}}</p>
+        </div>
+        {% endif %}
+        {% for question in form.questions.all %}
+        <div class="margin-top-bottom box question-box">
+            <h1 class="question-title txtClr">{{question.question}} {% if question.required %}<span class="require-star">*</span>{% endif %}</h1>
+            {% if question.question_type == "short" %}
+                <p class="short-answer">{{response|get_response:question.pk}}</p>
+            {% elif question.question_type == "paragraph" %}
+                <p class="long-answer">{{response|get_response:question.pk|linebreaksbr}}</p>
+            {% elif question.question_type == "multiple choice" %}
+                {% for choice in question.choices.all %}
+                <div class="multiple-choice">
+                    {% if response|get_response:question.pk|to_int == choice.pk|to_int %}
+                        <input type="radio" name="{{question.id}}" id="{{choice.id}}" checked>
+                    {% else %}
+                        <input type="radio" name="{{question.id}}" id="{{choice.id}}" disabled>
+                    {% endif %}
+                    <label for="{{choice.id}}" class="txtClr">{{choice.choice}}</label>
+                </div>
+                {% endfor %}
+            {% elif question.question_type == "checkbox" %}
+                {% for choice in question.choices.all %}
+                <div class="multiple-choice">
+                    {% if response|get_responses:question.pk|is_response:choice.pk %}
+                        <input type="checkbox" name="{{question.id}}" id="{{choice.id}}" value="{{choice.id}}" checked onclick="return false">
+                    {% else %}
+                        <input type="checkbox" name="{{question.id}}" id="{{choice.id}}" value="{{choice.id}}" disabled>
+                    {% endif %}
+                    <label for="{{choice.id}}" class="txtClr">{{choice.choice}}</label>
+                </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+    {% if user == form.creator %}
+        <a href="{% url 'edit_form' form.code %}">
+            <img src="{% static 'Icon/question.png' %}" alt="Edit Question" title="Edit this form" class="edit-form-link">
+        </a>
+    {% endif %}
+</div>
+{% endblock %}

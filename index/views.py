@@ -553,6 +553,25 @@ def responses(request, code):
         "responses": Responses.objects.filter(response_to = formInfo)
     })
 
+def response(request, code, response_code):
+    formInfo = Form.objects.filter(code = code)
+    #Checking if form exists
+    if formInfo.count() == 0:
+        return HttpResponseRedirect(reverse('404'))
+    else: formInfo = formInfo[0]
+    #Checking if form creator is user
+    if not formInfo.allow_view_score:
+        if formInfo.creator != request.user:
+            return HttpResponseRedirect(reverse("403"))
+    responseInfo = Responses.objects.filter(response_code = response_code)
+    if responseInfo.count() == 0:
+        return HttpResponseRedirect(reverse('404'))
+    else: responseInfo = responseInfo[0]
+    return render(request, "index/response.html", {
+        "form": formInfo,
+        "response": responseInfo
+    })
+
 # Error handler
 def FourZeroThree(request):
     return render(request, "error/403.html")

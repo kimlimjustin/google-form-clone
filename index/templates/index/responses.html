@@ -42,11 +42,11 @@
             <ul>
                 {% for i in responses %}
                     {% if form.collect_email %}
-                        <li><a href = "" class="link">{{i.responder_email}}'s response</a></li>
+                        <li><a href = "{% url 'response' form.code i.response_code %}" class="link">{{i.responder_email}}'s response</a></li>
                     {% elif form.authenticated_responder %}
-                        <li><a href = "" class="link">{{i.responder.username}}'s response</a></li>
+                        <li><a href = "{% url 'response' form.code i.response_code %}" class="link">{{i.responder.username}}'s response</a></li>
                     {% else %}
-                        <li><a href = "" class="link">{{i.responder}}'s response</a></li>
+                        <li><a href = "{% url 'response' form.code i.response_code %}" class="link">{{i.responder}}'s response</a></li>
                     {% endif %}
                 {% endfor %}
             </ul>
