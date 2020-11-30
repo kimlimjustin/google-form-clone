@@ -585,6 +585,18 @@ input[type=number]::-webkit-outer-spin-button {
     font-size: 1.5rem;
     font-weight: normal;
 }
+
+.score-title{
+    font-family: "Google Sans";
+    margin: 10px;
+    font-size: 1.2rem;
+    font-weight: normal;
+}
+
+.question-title{
+    font-family: "Google Sans";
+    font-size: 1.5rem;
+}
 @media only screen and (max-width: 768px){
     .nav-form-title{
         width: 100px;

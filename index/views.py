@@ -563,13 +563,39 @@ def response(request, code, response_code):
     if not formInfo.allow_view_score:
         if formInfo.creator != request.user:
             return HttpResponseRedirect(reverse("403"))
+    total_score = 0
+    for i in formInfo.questions.all():
+        total_score += i.score
     responseInfo = Responses.objects.filter(response_code = response_code)
     if responseInfo.count() == 0:
         return HttpResponseRedirect(reverse('404'))
     else: responseInfo = responseInfo[0]
+    score = 0
+    for i in responseInfo.response.all():
+        if i.answer_to.question_type == "short" or i.answer_to.question_type == "paragraph":
+            if i.answer == i.answer_to.answer_key: score += i.answer_to.score
+        elif i.answer_to.question_type == "multiple choice":
+            answerKey = None
+            for j in i.answer_to.choices.all():
+                if j.is_answer: answerKey = j.id
+            if int(answerKey) == int(i.answer):
+                score += i.answer_to.score
+    _temp = []
+    for i in responseInfo.response.all():
+        if i.answer_to.question_type == "checkbox" and i.answer_to.pk not in _temp:
+            answers = []
+            answer_keys = []
+            for j in responseInfo.response.filter(answer_to__pk = i.answer_to.pk):
+                answers.append(int(j.answer))
+                for k in j.answer_to.choices.all():
+                    if k.is_answer and k.pk not in answer_keys: answer_keys.append(k.pk)
+                _temp.append(i.answer_to.pk)
+            if answers == answer_keys: score += i.answer_to.score
     return render(request, "index/response.html", {
         "form": formInfo,
-        "response": responseInfo
+        "response": responseInfo,
+        "score": score,
+        "total_score": total_score
     })
 
 # Error handler
