@@ -15,11 +15,11 @@
         <div class="float-right">
             <img src="{% static 'Icon/theme.png' %}" alt="Theme icon" id="customize-theme-btn" title = "Customize theme" class="nav-form-menu-icon" />
             <a href="{% url 'view_form' form.code %}">
-                <img src="{% static 'Icon/eye.png' %}" alt="Preview icon" title = "Preview" class="nav-form-menu-icon big-screen" />
+            <img src="{% static 'Icon/eye.png' %}" alt="Preview icon" title = "Preview" class="nav-form-menu-icon big-screen" />
             </a>
-            <img src="{% static 'Icon/send.png' %}" alt ="Send icon" title = "Send" class="nav-form-menu-icon small-screen" />
+            <img src="{% static 'Icon/send.png' %}" alt ="Send icon" title = "Send" class="nav-form-menu-icon small-screen" id="send-form-btn" />
             <img src="{% static 'Icon/setting.png' %}" alt="Setting icon" title = "Setting" class="nav-form-menu-icon open-setting" />
-            <button class = "btn send-form-btn big-screen">Send</button>
+            <button class = "btn send-form-btn big-screen" title = "Send" id="send-form-btn">Send</button>
         </div>
     </div>
     <div class="form-topnav">
@@ -146,6 +146,17 @@
                     <input type="submit" value="Delete" class="form-control delete-form-btn">
                 </fieldset>
             </form>
+        </div>
+    </div>
+    <div class="modal" id="send-form">
+        <div class="modal-content">
+            <span class="modal-close-btn" id="close-send-form">&times;</span>
+            <h1 class = "modal-title">Send form</h1>
+            <div class="modal-division">
+                <h4 class="modal-subtitle">Link:</h4>
+                <input type="url" class="form-control" value="{{request.get_host}}/form/{{form.code}}/viewform" copy-btn id="copy-url">
+            </div>
+            <button class="btn btn-submit" copy-btn>Copy</button>
         </div>
     </div>
 </div>

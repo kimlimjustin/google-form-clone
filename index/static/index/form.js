@@ -80,6 +80,24 @@ document.addEventListener("DOMContentLoaded", () => {
             if(e.target == document.querySelector("#setting")) document.querySelector("#setting").style.display = "none";
         }
     })
+    document.querySelectorAll("#send-form-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+            document.querySelector("#send-form").style.display = "block";
+        })
+        document.querySelector("#close-send-form").addEventListener("click", () => {
+            document.querySelector("#send-form").style.display = "none";
+        })
+        window.onclick = e => {
+            if(e.target == document.querySelector("#send-form")) document.querySelector("#send-form").style.display = "none";
+        }
+    })
+    document.querySelectorAll("[copy-btn]").forEach(btn => {
+        btn.addEventListener("click", () => {
+            var url = document.getElementById("copy-url");
+            navigator.clipboard.writeText(url.value);
+            document.querySelector("#send-form").style.display = "none";
+        })
+    })
     document.querySelector("#setting-form").addEventListener("submit", e => {
         e.preventDefault();
         fetch('edit_setting', {
