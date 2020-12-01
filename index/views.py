@@ -640,6 +640,137 @@ def edit_response(request, code, response_code):
         "response": response
     })
 
+def contact_form_template(request):
+    # Creator must be authenticated
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect(reverse("login"))
+    # Create a blank form API
+    if request.method == "POST":
+        code = ''.join(random.choice(string.ascii_letters + string.digits) for x in range(30))
+        name = Questions(question_type = "short", question= "Name", required= True)
+        name.save()
+        email = Questions(question_type="short", question = "Email", required = True)
+        email.save()
+        address = Questions(question_type="paragraph", question="Address", required = True)
+        address.save()
+        phone = Questions(question_type="short", question="Phone number", required = False)
+        phone.save()
+        comments = Questions(question_type = "paragraph", question = "Comments", required = False)
+        comments.save()
+        form = Form(code = code, title = "Contact information", creator=request.user, background_color="#e2eee0")
+        form.save()
+        form.questions.add(name)
+        form.questions.add(email)
+        form.questions.add(address)
+        form.questions.add(phone)
+        form.questions.add(comments)
+        form.save()
+        return JsonResponse({"message": "Sucess", "code": code})
+
+def customer_feedback_template(request):
+    # Creator must be authenticated
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect(reverse("login"))
+    # Create a blank form API
+    if request.method == "POST":
+        code = ''.join(random.choice(string.ascii_letters + string.digits) for x in range(30))
+        comment = Choices(choice = "Comments")
+        comment.save()
+        question = Choices(choice = "Questions")
+        question.save()
+        bug = Choices(choice = "Bug Reports")
+        bug.save()
+        feature = Choices(choice = "Feature Request")
+        feature.save()
+        feedback_type = Questions(question = "Feedback Type", question_type="multiple choice", required=False)
+        feedback_type.save()
+        feedback_type.choices.add(comment)
+        feedback_type.choices.add(bug)
+        feedback_type.choices.add(question)
+        feedback_type.choices.add(feature)
+        feedback_type.save()
+        feedback = Questions(question = "Feedback", question_type="paragraph", required=True)
+        feedback.save()
+        suggestion = Questions(question = "Suggestions for improvement", question_type="paragraph", required=False)
+        suggestion.save()
+        name = Questions(question = "Name", question_type="short", required=False)
+        name.save()
+        email = Questions(question= "Email", question_type="short", required=False)
+        email.save()
+        form = Form(code = code, title = "Customer Feedback", creator=request.user, background_color="#e2eee0", confirmation_message="Thanks so much for giving us feedback!",
+        description = "We would love to hear your thoughts or feedback on how we can improve your experience!")
+        form.save()
+        form.questions.add(feedback_type)
+        form.questions.add(feedback)
+        form.questions.add(suggestion)
+        form.questions.add(name)
+        form.questions.add(email)
+        return JsonResponse({"message": "Sucess", "code": code})
+
+def event_registration_template(request):
+    # Creator must be authenticated
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect(reverse("login"))
+    # Create a blank form API
+    if request.method == "POST":
+        code = ''.join(random.choice(string.ascii_letters + string.digits) for x in range(30))
+        name = Questions(question="Name", question_type= "short", required=False)
+        name.save()
+        email = Questions(question = "email", question_type="short", required=True)
+        email.save()
+        organization = Questions(question = "Organization", question_type= "short", required=True)
+        organization.save()
+        day1 = Choices(choice="Day 1")
+        day1.save()
+        day2 = Choices(choice= "Day 2")
+        day2.save()
+        day3 = Choices(choice= "Day 3")
+        day3.save()
+        day = Questions(question="What days will you attend?", question_type="checkbox", required=True)
+        day.save()
+        day.choices.add(day1)
+        day.choices.add(day2)
+        day.choices.add(day3)
+        day.save()
+        dietary_none = Choices(choice="None")
+        dietary_none.save()
+        dietary_vegetarian = Choices(choice="Vegetarian")
+        dietary_vegetarian.save()
+        dietary_kosher = Choices(choice="Kosher")
+        dietary_kosher.save()
+        dietary_gluten = Choices(choice = "Gluten-free")
+        dietary_gluten.save()
+        dietary = Questions(question = "Dietary restrictions", question_type="multiple choice", required = True)
+        dietary.save()
+        dietary.choices.add(dietary_none)
+        dietary.choices.add(dietary_vegetarian)
+        dietary.choices.add(dietary_gluten)
+        dietary.choices.add(dietary_kosher)
+        dietary.save()
+        accept_agreement = Choices(choice = "Yes")
+        accept_agreement.save()
+        agreement = Questions(question = "I understand that I will have to pay $$ upon arrival", question_type="checkbox", required=True)
+        agreement.save()
+        agreement.choices.add(accept_agreement)
+        agreement.save()
+        form = Form(code = code, title = "Event Registration", creator=request.user, background_color="#fdefc3", 
+        confirmation_message="We have received your registration.\n\
+Insert other information here.\n\
+\n\
+Save the link below, which can be used to edit your registration up until the registration closing date.",
+        description = "Event Timing: January 4th-6th, 2016\n\
+Event Address: 123 Your Street Your City, ST 12345\n\
+Contact us at (123) 456-7890 or no_reply@example.com", edit_after_submit=True, allow_view_score=False)
+        form.save()
+        form.questions.add(name)
+        form.questions.add(email)
+        form.questions.add(organization)
+        form.questions.add(day)
+        form.questions.add(dietary)
+        form.questions.add(agreement)
+        form.save()
+        return JsonResponse({"message": "Sucess", "code": code})
+
 # Error handler
 def FourZeroThree(request):
     return render(request, "error/403.html")

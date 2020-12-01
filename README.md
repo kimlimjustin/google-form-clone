@@ -1,11 +1,10 @@
 # Google Forms CLONE
 
-##### Warning: this project has not finished yet. 
+![Google Forms clone demo](https://drive.google.com/uc?export=view&id=1GEApyE6aRP74zf2ltmTqpr97NDMHOHbP)
 
-
-
+##### For the best experience, please use a device with a width of at least 350px
 ## Built using:
-- Python with Django framework
+- Python with Django framework and Jinja templating language
 - Vanilla Javascript
 
 ## Getting started:

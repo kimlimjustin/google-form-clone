@@ -118,14 +118,13 @@ body{
 }
 
 .form-template-box{
-    width: 152px;
-    height: 114px;
-    margin: 5px 0 10px 0;
+    margin: 5px 30px 10px 0;
     float: left;
 }
 
 .form-template-box img{
-    width: inherit;
+    width: 10em;
+    height: 7em;
     float: left;
 }
 
@@ -620,6 +619,12 @@ input[type=number]::-webkit-outer-spin-button {
 
 .edit-response-link{
     margin-left: 15px;
+}
+
+.form-template-label{
+    font-family: "Google Sans";
+    margin: 10px;
+    display: block;
 }
 @media only screen and (max-width: 768px){
     .nav-form-title{
