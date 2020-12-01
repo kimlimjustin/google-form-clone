@@ -617,6 +617,10 @@ input[type=number]::-webkit-outer-spin-button {
     font-size: 1.1rem;
     font-weight: normal;
 }
+
+.edit-response-link{
+    margin-left: 15px;
+}
 @media only screen and (max-width: 768px){
     .nav-form-title{
         width: 100px;

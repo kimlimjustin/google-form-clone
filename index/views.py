@@ -599,6 +599,47 @@ def response(request, code, response_code):
         "total_score": total_score
     })
 
+def edit_response(request, code, response_code):
+    formInfo = Form.objects.filter(code = code)
+    #Checking if form exists
+    if formInfo.count() == 0:
+        return HttpResponseRedirect(reverse('404'))
+    else: formInfo = formInfo[0]
+    response = Responses.objects.filter(response_code = response_code, response_to = formInfo)
+    if response.count() == 0:
+        return HttpResponseRedirect(reverse('404'))
+    else: response = response[0]
+    if formInfo.authenticated_responder:
+        if not request.user.is_authenticated:
+            return HttpResponseRedirect(reverse("login"))
+        if response.responder != request.user:
+            return HttpResponseRedirect(reverse('403'))
+    if request.method == "POST":
+        if formInfo.authenticated_responder and not response.responder:
+            response.responder = request.user
+            response.save()
+        if formInfo.collect_email:
+            response.responder_email = request.POST["email-address"]
+            response.save()
+        #Deleting all existing answers
+        for i in response.response.all():
+            i.delete()
+        for i in request.POST:
+            #Excluding csrf token and email address
+            if i == "csrfmiddlewaretoken" or i == "email-address":
+                continue
+            question = formInfo.questions.get(id = i)
+            for j in request.POST.getlist(i):
+                answer = Answer(answer=j, answer_to = question)
+                answer.save()
+                response.response.add(answer)
+                response.save()
+        return HttpResponseRedirect(reverse("response", args = [formInfo.code, response.response_code]))
+    return render(request, "index/edit_response.html", {
+        "form": formInfo,
+        "response": response
+    })
+
 # Error handler
 def FourZeroThree(request):
     return render(request, "error/403.html")
