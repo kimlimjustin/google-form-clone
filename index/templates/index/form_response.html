@@ -9,7 +9,12 @@
     <span id="text-color" style="display: none;">{{form.text_color}}</span>
     <div class="margin-top-bottom box box-shadow bg-white">
         <h1 class="form-title txtClr">{{form.title}}</h1>
-        <p class="text-label">{{form.confirmation_message}}</p>
+        <p class="text-label margin-left-right" style="margin-left: 10px;">{{form.confirmation_message}}</p>
+        {% if form.allow_view_score %}
+        <div class="modal-division">
+            <a href="{% url 'response' form.code code %}" class="btn view-score-btn">View Score</a>
+        </div>
+        {% endif %}
     </div>
 </div>
 {% endblock %}

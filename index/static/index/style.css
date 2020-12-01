@@ -597,6 +597,26 @@ input[type=number]::-webkit-outer-spin-button {
     font-family: "Google Sans";
     font-size: 1.5rem;
 }
+
+.view-score-btn{
+    position: relative;
+    background-color: #673ab7;
+    color: #ddd;
+    font-family: "Google Sans";
+    border: 1px solid #ddd;
+    padding: 10px 20px;
+    margin: 5px 15px;
+}
+
+.feedback{
+    margin: 10px 5px;
+}
+
+.feedback-title{
+    font-family: "Poppins";
+    font-size: 1.1rem;
+    font-weight: normal;
+}
 @media only screen and (max-width: 768px){
     .nav-form-title{
         width: 100px;

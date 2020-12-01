@@ -534,7 +534,8 @@ def submit_form(request, code):
                 response.response.add(answer)
                 response.save()
         return render(request, "index/form_response.html", {
-            "form": formInfo
+            "form": formInfo,
+            "code": code
         })
 
 def responses(request, code):

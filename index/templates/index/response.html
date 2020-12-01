@@ -15,7 +15,9 @@
         <div class="margin-top-bottom box question-box">
             <div class="form-title-box">
                 <h1 class="form-title txtClr">{{form.title}}</h1>
+                {% if form.is_quiz %}
                 <h4 class="score-title">Score: {{score}} / {{total_score}}</h4>
+                {% endif %}
                 <p class="required-info">* Required</p>
             </div>
             <div class="form-description txtClr">{{form.description|linebreaksbr}}</div>
@@ -29,7 +31,7 @@
         {% for question in form.questions.all %}
         <div class="margin-top-bottom box question-box">
             <h1 class="response-title txtClr">{{question.question}} {% if question.required %}<span class="require-star">*</span>{% endif %}
-            <span class="float-right">{{response|score:question.pk}} / {{question.score}}</span></h1>
+            {% if form.is_quiz %}<span class="float-right">{{response|score:question.pk}} / {{question.score}}</span>{% endif %}</h1>
             {% if question.question_type == "short" %}
                 <p class="short-answer">{{response|get_response:question.pk}}</p>
             {% elif question.question_type == "paragraph" %}
@@ -56,6 +58,12 @@
                     <label for="{{choice.id}}" class="txtClr">{{choice.choice}}</label>
                 </div>
                 {% endfor %}
+            {% endif %}
+            {% if user != form.creator and question.feedback != "" %}
+                <div class="feedback">
+                    <h5 class="feedback-title">Feedback:</h5>
+                    <p class="text-label long-answer">{{question.feedback|linebreaksbr|urlize}}</p>
+                </div>
             {% endif %}
         </div>
         {% endfor %}
