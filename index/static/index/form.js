@@ -365,9 +365,16 @@ document.addEventListener("DOMContentLoaded", () => {
                                     <div class="choice">
                                         <input type = "radio" id = "add-choice" disabled />
                                         <label for = "add-choice" class="add-option" id="add-option" data-question="${result["question_id"]}"
-                                        data-type = "${result["question"]}">Add option</label>
+                                        data-type = "${this.value}">Add option</label>
                                     </div>`;
                                     choicesElement.parentNode.replaceChild(ele, choicesElement);
+                                    editChoice()
+                                    removeOption()
+                                    changeType()
+                                    editQuestion()
+                                    editRequire()
+                                    addOption()
+                                    deleteQuestion()
                                 })
                             }else{
                                 if(this.value === "short"){
@@ -428,9 +435,16 @@ document.addEventListener("DOMContentLoaded", () => {
                                 <div class="choice">
                                     <input type = "radio" id = "add-choice" disabled />
                                     <label for = "add-choice" class="add-option" id="add-option" data-question="${result["question_id"]}"
-                                    data-type = "${result["question"]}">Add option</label>
+                                    data-type = "${this.value}">Add option</label>
                                 </div>`;
                                 question.insertBefore(ele, question.childNodes[4])
+                                editChoice()
+                                removeOption()
+                                changeType()
+                                editQuestion()
+                                editRequire()
+                                addOption()
+                                deleteQuestion()
                             })
                         }else{
                             if(this.value === "short"){
@@ -450,13 +464,6 @@ document.addEventListener("DOMContentLoaded", () => {
                     })
                 }
                 this.setAttribute("data-origin_type", this.value);
-                editChoice()
-                removeOption()
-                changeType()
-                editQuestion()
-                editRequire()
-                addOption()
-                deleteQuestion()
             })
         })
     }
