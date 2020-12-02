@@ -13,7 +13,7 @@
         {% if form.edit_after_submit %}
         <a href="{% url 'edit_response' form.code code %}" class="edit-response-link">Edit response</a>
         {% endif %}
-        {% if form.allow_view_score %}
+        {% if form.is_quiz and form.allow_view_score %}
         <div class="modal-division">
             <a href="{% url 'response' form.code code %}" class="btn view-score-btn">View Score</a>
         </div>

@@ -565,33 +565,34 @@ def response(request, code, response_code):
         if formInfo.creator != request.user:
             return HttpResponseRedirect(reverse("403"))
     total_score = 0
-    for i in formInfo.questions.all():
-        total_score += i.score
+    score = 0
     responseInfo = Responses.objects.filter(response_code = response_code)
     if responseInfo.count() == 0:
         return HttpResponseRedirect(reverse('404'))
     else: responseInfo = responseInfo[0]
-    score = 0
-    for i in responseInfo.response.all():
-        if i.answer_to.question_type == "short" or i.answer_to.question_type == "paragraph":
-            if i.answer == i.answer_to.answer_key: score += i.answer_to.score
-        elif i.answer_to.question_type == "multiple choice":
-            answerKey = None
-            for j in i.answer_to.choices.all():
-                if j.is_answer: answerKey = j.id
-            if int(answerKey) == int(i.answer):
-                score += i.answer_to.score
-    _temp = []
-    for i in responseInfo.response.all():
-        if i.answer_to.question_type == "checkbox" and i.answer_to.pk not in _temp:
-            answers = []
-            answer_keys = []
-            for j in responseInfo.response.filter(answer_to__pk = i.answer_to.pk):
-                answers.append(int(j.answer))
-                for k in j.answer_to.choices.all():
-                    if k.is_answer and k.pk not in answer_keys: answer_keys.append(k.pk)
-                _temp.append(i.answer_to.pk)
-            if answers == answer_keys: score += i.answer_to.score
+    if formInfo.is_quiz:
+        for i in formInfo.questions.all():
+            total_score += i.score
+        for i in responseInfo.response.all():
+            if i.answer_to.question_type == "short" or i.answer_to.question_type == "paragraph":
+                if i.answer == i.answer_to.answer_key: score += i.answer_to.score
+            elif i.answer_to.question_type == "multiple choice":
+                answerKey = None
+                for j in i.answer_to.choices.all():
+                    if j.is_answer: answerKey = j.id
+                if answerKey is not None and int(answerKey) == int(i.answer):
+                    score += i.answer_to.score
+        _temp = []
+        for i in responseInfo.response.all():
+            if i.answer_to.question_type == "checkbox" and i.answer_to.pk not in _temp:
+                answers = []
+                answer_keys = []
+                for j in responseInfo.response.filter(answer_to__pk = i.answer_to.pk):
+                    answers.append(int(j.answer))
+                    for k in j.answer_to.choices.all():
+                        if k.is_answer and k.pk not in answer_keys: answer_keys.append(k.pk)
+                    _temp.append(i.answer_to.pk)
+                if answers == answer_keys: score += i.answer_to.score
     return render(request, "index/response.html", {
         "form": formInfo,
         "response": responseInfo,
@@ -657,7 +658,7 @@ def contact_form_template(request):
         phone.save()
         comments = Questions(question_type = "paragraph", question = "Comments", required = False)
         comments.save()
-        form = Form(code = code, title = "Contact information", creator=request.user, background_color="#e2eee0")
+        form = Form(code = code, title = "Contact information", creator=request.user, background_color="#e2eee0", allow_view_score = False, edit_after_submit = True)
         form.save()
         form.questions.add(name)
         form.questions.add(email)
@@ -698,7 +699,7 @@ def customer_feedback_template(request):
         email = Questions(question= "Email", question_type="short", required=False)
         email.save()
         form = Form(code = code, title = "Customer Feedback", creator=request.user, background_color="#e2eee0", confirmation_message="Thanks so much for giving us feedback!",
-        description = "We would love to hear your thoughts or feedback on how we can improve your experience!")
+        description = "We would love to hear your thoughts or feedback on how we can improve your experience!", allow_view_score = False, edit_after_submit = True)
         form.save()
         form.questions.add(feedback_type)
         form.questions.add(feedback)
