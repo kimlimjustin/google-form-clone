@@ -37,7 +37,8 @@
     <div class="container">
         <span id="bg-color" style="display: none;">{{form.background_color}}</span>
         <span id="text-color" style="display: none;">{{form.text_color}}</span>
-        <div class="margin-top-bottom box question-box">
+        <div class="margin-top-bottom box question-box" id="responses">
+            {% if responses.count > 0 %}
             <h1 class="response-title">Individual Response:</h1>
             <ul>
                 {% for i in responses %}
@@ -50,6 +51,10 @@
                     {% endif %}
                 {% endfor %}
             </ul>
+            <button class="btn btn-danger" id="delete-responses">Delete all responses</button>
+            {% else %}
+            <h1 class="response-title">0 responses</h1>
+            {% endif %}
         </div>
     </div>
     <div class="question-options">

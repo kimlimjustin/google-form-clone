@@ -139,4 +139,22 @@ document.addEventListener("DOMContentLoaded", () => {
             tx.style.height = (10 + tx.scrollHeight)+"px";
         })
     })
+    if(document.querySelector("#delete-responses")){
+        document.querySelector("#delete-responses").addEventListener("click", () => {
+            if(window.confirm("Are you sure? This action CANNOT be undone.")){
+                fetch('responses/delete', {
+                    method: "DELETE",
+                    headers: {'X-CSRFToken': csrf}
+                })
+                .then(() => {
+                    let ele = document.createElement("div");
+                    ele.classList.add('margin-top-bottom');
+                    ele.classList.add('box');
+                    ele.classList.add('question-box');
+                    ele.innerHTML = '<h1 class="response-title">0 responses</h1>';
+                    document.querySelector("#responses").parentNode.replaceChild(ele, document.querySelector("#responses"))
+                })
+            }
+        })
+    }
 })

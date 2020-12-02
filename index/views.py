@@ -789,6 +789,13 @@ def delete_responses(request, code):
     #Checking if form creator is user
     if formInfo.creator != request.user:
         return HttpResponseRedirect(reverse("403"))
+    if request.method == "DELETE":
+        responses = Responses.objects.filter(response_to = formInfo)
+        for response in responses:
+            for i in response.response.all():
+                i.delete()
+            response.delete()
+        return JsonResponse({"message": "Success"})
 
 # Error handler
 def FourZeroThree(request):
