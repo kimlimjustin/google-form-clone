@@ -635,7 +635,13 @@ def edit_response(request, code, response_code):
                 answer.save()
                 response.response.add(answer)
                 response.save()
-        return HttpResponseRedirect(reverse("response", args = [formInfo.code, response.response_code]))
+        if formInfo.is_quiz:
+            return HttpResponseRedirect(reverse("response", args = [formInfo.code, response.response_code]))
+        else:
+            return render(request, "index/form_response.html", {
+                "form": formInfo,
+                "code": response.response_code
+            })
     return render(request, "index/edit_response.html", {
         "form": formInfo,
         "response": response
@@ -771,6 +777,18 @@ Contact us at (123) 456-7890 or no_reply@example.com", edit_after_submit=True, a
         form.questions.add(agreement)
         form.save()
         return JsonResponse({"message": "Sucess", "code": code})
+
+def delete_responses(request, code):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect(reverse("login"))
+    formInfo = Form.objects.filter(code = code)
+    #Checking if form exists
+    if formInfo.count() == 0:
+        return HttpResponseRedirect(reverse('404'))
+    else: formInfo = formInfo[0]
+    #Checking if form creator is user
+    if formInfo.creator != request.user:
+        return HttpResponseRedirect(reverse("403"))
 
 # Error handler
 def FourZeroThree(request):
