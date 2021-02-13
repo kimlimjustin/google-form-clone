@@ -126,6 +126,8 @@
                 <option value="#8a8a8a"></option>
                 <option value="#4c3d45"></option>
                 <option value="#272124"></option>
+                <option value="#9aa0a2"></option>
+                <option value="#d8ef89"></option>
             </datalist>
         </div>
     </div>
@@ -134,7 +136,7 @@
             <form id="setting-form">
                 <span class="modal-close-btn" id="close-setting">&times;</span>
                 <h1 class = "modal-title">Setting</h1>
-                <h4 class="setting-preview-form small-screen"><a href="">Preview form here</a></h4>
+                <h4 class="setting-preview-form small-screen"><a href="{% url 'view_form' form.code %}">Preview form here</a></h4>
                 <div class="modal-division">
                     <div class="form-group">
                         <h3 class="modal-subtitle">General</h3>
