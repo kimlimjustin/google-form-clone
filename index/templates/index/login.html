@@ -7,13 +7,15 @@
             <p class="form-error">{{message}}</p>
             {% csrf_token %}
         </div>
-        <div class="form-group">
-            <p class="form-label">Username:</p>
-            <input type="text" class="form-control" name="username">
+        <div class="form-group form-animate">
+            <p class="form-label">Username</p>
+            <input type="text" class="input-animate" required name="username">
+            <span class="input-onFocus"></span>
         </div>
-        <div class="form-group">
+        <div class="form-group form-animate">
             <p class="form-label">Password:</p>
-            <input type="password" name="password" class="form-control">
+            <input type="password" name="password" class="input-animate" required>
+            <span class="input-onFocus"></span>
         </div>
         <div class="form-group">
             <p class="form-label">Don't have account yet? <a class="link" href = "{% url 'register' %}">Register</a></p>
