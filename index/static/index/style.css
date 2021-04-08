@@ -241,6 +241,7 @@ body{
     font-weight: normal;
     margin: 10px;
     width: -webkit-fill-available;
+    width: -moz-available;
 }
 
 .form-description{
@@ -248,6 +249,7 @@ body{
     font-family: "Roboto Condensed";
     margin: 10px;
     width: -webkit-fill-available;
+    width: -moz-available;
 }
 
 .form-title-box{
@@ -315,6 +317,7 @@ body{
 }
 .confirmation-msg-input{
     width: -webkit-fill-available;
+    width: -moz-available;
     border-bottom: 1px solid #202124;
     min-height: 20px !important;
 }
@@ -490,6 +493,7 @@ body{
 
 .long-answer{
     width: -webkit-fill-available;
+    width: -moz-available;
     border: none;
     padding: 5px;
     border-bottom: 1px solid #70757a;
@@ -635,6 +639,7 @@ input[type=number]::-webkit-outer-spin-button {
   
 .input-animate {
     width: -webkit-fill-available;
+    width: -moz-available;
     border: none;
     display: inline-block;
     outline: none;
@@ -669,6 +674,7 @@ input[type=number]::-webkit-outer-spin-button {
 
     .form-list-link, .form-box{
         width: -webkit-fill-available;
+        width: -moz-available;
     }
     .modal{
         padding: 0;
@@ -678,6 +684,7 @@ input[type=number]::-webkit-outer-spin-button {
         max-width: none;
         max-height: none;
         width: -webkit-fill-available;
+        width: -moz-available;
         height: calc(100% - 40px);
         border-radius: 0%;
     }

@@ -134,6 +134,7 @@ body[theme="light"]{
 	border: 1px solid #999;
 	border-radius: 5px;
 	width: -webkit-fill-available;
+	width: -moz-available;
 }
 
 .box-image img, .box-image{
@@ -168,6 +169,7 @@ body[theme="light"]{
 	color: black;
 	border: 1px solid #bfbfbf;
 	width: -webkit-fill-available;
+	width: -moz-available;
 	border-radius: 5px;
 	padding: 8px;
 
