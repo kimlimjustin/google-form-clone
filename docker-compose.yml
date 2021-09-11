@@ -19,7 +19,7 @@ services:
     depends_on:
       - db
   migration:
-    image: postgres
+    build: .
     command: python manage.py migrate --noinput
     volumes:
       - .:/code
