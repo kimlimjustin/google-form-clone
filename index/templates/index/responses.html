@@ -1,5 +1,8 @@
 {% extends 'index/layout.html' %}
 {% load static %}
+{% load get_property %}
+{% load generate_color %}
+{% load count %}
 {% block title %}{{form.title}}'s response ~ Google Forms CLONE{% endblock %}
 {% block script %}
 <script src="{% static 'index/responses.js' %}" defer></script>
@@ -56,7 +59,37 @@
             <h1 class="response-title">0 responses</h1>
             {% endif %}
         </div>
-    </div>
+        <div class="margin-top-bottom box question-box">
+            <h1 class="response-title">Questions Summary:</h1>
+            {% for r in responsesSummary %}
+            <div class="response-summary">
+                <h3 class="response-summary-title">{{r.question.question}}</h3>
+                {% if r.answers|count > 0 or filteredResponsesSummary|get_property:r.question.question|count > 0 %}
+                    {% if r.question.question_type == 'short' or r.question.question_type == 'paragraph' %}
+                        {% for i in r.answers %}
+                            <blockquote>{{i.answer}}</blockquote>
+                        {% endfor %}
+                    {% else %}
+                            <canvas id="myChart{{r.question.id}}" class="pie-chart"></canvas>
+                            <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+                            <script>
+                                Chart.defaults.global.defaultFontFamily = "Roboto";
+                                Chart.defaults.global.defaultFontSize = 30;
+                                var ctx = document.getElementById("myChart{{r.question.id}}");
+                                let chartData{{r.question.id}} = {labels: [{% for i in filteredResponsesSummary|get_property:r.question.question %}"{{i}}",{% endfor %}], 
+                                datasets: [{
+                                    data: [{% for i in filteredResponsesSummary|get_property:r.question.question %}{{filteredResponsesSummary|get_property:r.question.question|get_property:i}},{% endfor %}],
+                                    backgroundColor: [{% for _ in filteredResponsesSummary|get_property:r.question.question %}"{{0|generate_color}}",{% endfor %}],
+                                }]}
+                                new Chart(ctx, {type: 'pie', data: chartData{{r.question.id}}, options: {responsive: true}});
+                            </script>
+                    {% endif %}
+                {% else %}
+                <blockquote><i>No responses</i></blockquote>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
     <div class="question-options">
         <a href="{% url 'view_form' form.code %}">
             <img src = "{% static 'Icon/eye.png' %}" class = "form-option-icon" title = "Preview" alt = "Preview icon" />
@@ -161,7 +194,7 @@
             <h1 class = "modal-title">Send form</h1>
             <div class="modal-division">
                 <h4 class="modal-subtitle">Link:</h4>
-                <input type="url" class="form-control" value="{{request.get_host}}/form/{{form.code}}/viewform" copy-btn id="copy-url">
+                <input type="url" class="form-control" value="http://{{request.get_host}}/form/{{form.code}}/viewform" copy-btn id="copy-url">
             </div>
             <button class="btn btn-submit" copy-btn>Copy</button>
         </div>
