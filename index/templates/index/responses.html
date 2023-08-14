@@ -55,6 +55,7 @@
                 {% endfor %}
             </ul>
             <button class="btn btn-danger" id="delete-responses">Delete all responses</button>
+            <a href="{% url 'export_csv' form.code  %}"><button class="btn btn-success" id="delete-responses">download</button></a>
             {% else %}
             <h1 class="response-title">0 responses</h1>
             {% endif %}

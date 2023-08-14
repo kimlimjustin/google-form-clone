@@ -8,6 +8,7 @@ from django.core import serializers
 import json
 import random
 import string
+import csv
 
 # Create your views here.
 def index(request):
@@ -572,6 +573,61 @@ def responses(request, code):
         "responsesSummary": responsesSummary,
         "filteredResponsesSummary": filteredResponsesSummary
     })
+
+def retrieve_checkbox_choices(response, question):
+    checkbox_answers = []
+
+    answers = Answer.objects.filter(answer_to=question, response=response)
+    for answer in answers:
+        selected_choice_ids = answer.answer.split(',')  # Split the string into individual choice IDs
+        selected_choices = Choices.objects.filter(pk__in=selected_choice_ids)
+        checkbox_answers.append([choice.choice for choice in selected_choices])
+
+    return checkbox_answers
+
+
+
+def exportcsv(request,code):
+    formInfo = Form.objects.filter(code = code)
+    formInfo = formInfo[0]
+    responses=Responses.objects.filter(response_to = formInfo)
+    questions = formInfo.questions.all()
+
+
+    http_response = HttpResponse()
+    http_response['Content-Disposition'] = f'attachment; filename= {formInfo.title}.csv'
+    writer = csv.writer(http_response)
+    header = ['Response Code', 'Responder', 'Responder Email','Responder_ip']
+    
+    for question in questions:
+        header.append(question.question)
+    
+    writer.writerow(header)
+
+    for response in responses:
+        response_data = [
+        response.response_code,
+        response.responder.username if response.responder else 'Anonymous',
+        response.responder_email if response.responder_email else '',
+        response.responder_ip if response.responder_ip else ''
+    ]
+        for question in questions:
+            answer = Answer.objects.filter(answer_to=question, response=response).first()
+            
+        
+            if  question.question_type not in ['multiple choice','checkbox']:
+                response_data.append(answer.answer if answer else '')
+            elif question.question_type == "multiple choice":
+                response_data.append(answer.answer_to.choices.get(id = answer.answer).choice if answer else '')
+            elif question.question_type == "checkbox":
+                if answer and question.question_type == 'checkbox':
+                    checkbox_choices = retrieve_checkbox_choices(response,answer.answer_to)
+                    response_data.append(checkbox_choices)
+
+        print(response_data)
+        writer.writerow(response_data)
+        
+    return http_response
 
 def response(request, code, response_code):
     formInfo = Form.objects.filter(code = code)
